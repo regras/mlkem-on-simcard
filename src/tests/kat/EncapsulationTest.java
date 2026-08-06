@@ -1,0 +1,167 @@
+package com.swiftcryptollc.crypto.provider;
+
+import com.swiftcryptollc.crypto.applet.MLKEMApplet;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+public class EncapsulationTest {
+
+    static class EncapsTestVector {
+        int tcId;
+        String parameterSet;
+        byte[] dk;
+        byte[] m;
+        byte[] k;
+        byte[] c;
+    }
+
+    @Test
+    public void testEncapsulation512() {
+        runEncapsulationSuite("ML-KEM-512", (short) 1);
+    }
+
+    @Test
+    public void testEncapsulation768() {
+        runEncapsulationSuite("ML-KEM-768", (short) 3);
+    }
+
+    @Test
+    public void testEncapsulation1024() {
+        runEncapsulationSuite("ML-KEM-1024", (short) 5);
+    }
+
+    private void runEncapsulationSuite(String parameterSet, short level) {
+        List<EncapsTestVector> vectors = loadTestVectorsFromJSON("internalProjectionEncapsDecaps.json", parameterSet, "encapsulation");
+
+        assertFalse(vectors.isEmpty(), "No test vectors loaded for " + parameterSet + " from internalProjectionEncapsDecaps.json");
+
+        int successCount = 0;
+        for (EncapsTestVector tv : vectors) {
+            try {
+                runEncapsulationVector(tv, level);
+                successCount++;
+            } catch (AssertionError e) {
+                fail("Test vector " + tv.tcId + " failed for " + parameterSet + ": " + e.getMessage());
+            }
+        }
+
+        System.out.println("EncapsulationTest: Successfully tested " + successCount + " test vectors for " + parameterSet);
+    }
+
+    private void runEncapsulationVector(EncapsTestVector tv, short level) {
+        new MLKEMApplet(level);
+
+        MLKEMApplet.packedDK = tv.dk.clone();
+
+        byte[] message = tv.m.clone();
+        switch (level) {
+            case 1:
+            case 2:
+                MLKEMApplet.encaps512Internal(message);
+                break;
+            case 3:
+                MLKEMApplet.encaps768Internal(message);
+                break;
+            case 5:
+                MLKEMApplet.encaps1024Internal(message);
+                break;
+            default:
+                fail("Unsupported ML-KEM level: " + level);
+        }
+
+        assertArrayEquals(tv.k, MLKEMApplet.secretKey, "Shared secret mismatch for vector " + tv.tcId);
+        assertArrayEquals(tv.c, MLKEMApplet.bufC, "Ciphertext mismatch for vector " + tv.tcId);
+    }
+
+    private List<EncapsTestVector> loadTestVectorsFromJSON(String filename, String parameterSet, String function) {
+        List<EncapsTestVector> vectors = new ArrayList<>();
+
+        try (InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("assets/" + filename)) {
+            if (inputStream == null) {
+                fail("Test vector file not found: " + filename);
+                return vectors;
+            }
+
+            JSONTokener tokener = new JSONTokener(new InputStreamReader(inputStream));
+            JSONObject root = new JSONObject(tokener);
+            JSONArray testGroups = root.getJSONArray("testGroups");
+
+            for (int i = 0; i < testGroups.length(); i++) {
+                JSONObject testGroup = testGroups.getJSONObject(i);
+                String groupParameterSet = testGroup.optString("parameterSet", "");
+                String groupFunction = testGroup.optString("function", "");
+
+                if (!parameterSet.equals(groupParameterSet) || !function.equals(groupFunction)) {
+                    continue;
+                }
+
+                JSONArray tests = testGroup.getJSONArray("tests");
+                for (int j = 0; j < tests.length(); j++) {
+                    JSONObject test = tests.getJSONObject(j);
+                    EncapsTestVector tv = new EncapsTestVector();
+                    tv.tcId = test.getInt("tcId");
+                    tv.parameterSet = groupParameterSet;
+                    tv.dk = hexToBytes(test.getString("dk"));
+                    tv.m = hexToBytes(test.getString("m"));
+                    tv.k = hexToBytes(test.getString("k"));
+                    tv.c = hexToBytes(test.getString("c"));
+                    vectors.add(tv);
+                }
+            }
+
+            System.out.println("Loaded " + vectors.size() + " test vectors from " + filename + " for " + parameterSet + " / " + function);
+
+        } catch (Exception e) {
+            fail("Exception reading test vectors: " + e.getMessage());
+        }
+
+        return vectors;
+    }
+
+    private byte[] hexToBytes(String hex) {
+        int len = hex.length();
+        byte[] bytes = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            bytes[i / 2] = (byte) Integer.parseInt(hex.substring(i, i + 2), 16);
+        }
+        return bytes;
+    }
+
+    //    @Test
+    public void testEncapsulation(){
+        String dkString = "0F08A374F51F022715F3884B9AF00795B4BCA5609204C36B9B556BA6B63439298DDAFA62E933CCA5B99A44E64E008ABE8D146B089932B36A75D8A0BBDD0174F8A4C7B640590613A359DC5E2BC80F3F6A8C7107145C5A1E29E7A07CE110946829F9C369D214233B44C0A9B68471C59BB20117D6912620E4AAA71843D5879BAF41C9D48BB93DAC390C714B242ABD16B780FF567820531010FC201F0251FD1740E595AEB32442BE840F05429BA5CB03DE6931C411CAB4992A8511B441EC5040A5579F634507E25776CBB3FEE85DDF73507E5179363BC1A3CA6D766383832C8F69FA27EB1ABD975B8E0B04020EB122C8F233B7D56060071688C5CDF8EABE0ED98919E0630AFAAFAD5A0E62C80AE2B59C36045E488A73C16B77A6D1CB4D1A1362F726D909C18845064D2B32F408904076C7EC448B906892E8C4B3103168F325B17F6C2892BA9F06F6593F539ABEE5965F17468EE05C91269C55792B4061148439CDEC81153BE498D8196055303D345AA46EE02221944724892B9760874E1297E87959DAC854C1574A05D6883ED688E891B815FAB9CE50690484588BC326FD450807A63D50751A3C53B137A6214946397DF4BF25F5994C2985DCC6BEA7D6777AF13E09A49EF6E12C436296302ACD176346CF4208932765CFA5280599BDA04646AD0C280809856E7CC38E749D1541A33C4878B193B032BB8018A62A3A0725DD0A48ED5897B7C56C068CA569F15C41DBB4859B13D2C01A81B93CB8979D4F921C98D19AF78522F1D05772F4818E281A47190A03B22377C0163E618E15127F25051AEC249CF6E17C42369E61793889E228F0274CC6FB9BF780AC6F270F14591A7880ADD4C18183D05DB748B36D0350860BCEDD3854255B16C078B027C8241EB6ADB0A04BD374C7FAC7917B4063B55C03E8B8A901FA88EB04288CE537CC8940AB57CD70E049A9977713961A40E0A79968A75AE9227EBA5FABF097C54504AF6092B2618F305389FFB97BC8CC0705997328CBB88390570FCAB516F9716917747AD09C21899A4671310F29BA562C536FB28ABAC42ED246184AA0721C35A3F88B458992145CB2224F601C25349B73A7CE97F53AC9736FB150C2353922861B5D69293D5A6C8E8CE29EBE5718FDCC32595B83996A43CF54BBC9184D2AA9790D23CB3101207AB190009DCE7F7682EAB1A2CDF779A23A577A6C758776CC595916107728F71A45D4C745A50649D4CB387C406E1CB53C14BCCA5C56101B8C7F63181B8D9C2730B795688A64B24A23ABB93D505493F1796469E89E9D906C90683EF76B2EE8A63E24162EC1532367CA5301857DD20940BC7A733CC8A877708DD6116F1048A0F40952E1C32BC36364EF1898EDB0296019659CC59679C259A07577984BCE54569A4A7BA14ED56B48916DFAD3338601B81209BC028CBBD1CA975158592C6C8EEDB3152E44693A9704A904773AA16A05E4361D2035761322399CCD23F3AC85AC0EFBE7C5CEA480C74045CDD03CCE56856ED5C83E520DA9D5B23B04C270FA1731E631ED23802451C536FAA3DAFC3403087063C95C902C3E5EFC150692AE2A6940AA26C887F657739573DC2248551B110CC4020D121BDA897308819778345F5037877A3246B228339D7B947B7A394D9C0A74B3423543AB43B2B53143CB849837EADB2ACDB65682EA247266CBE45435FA245F05B0A913A9B984F3B575D283EA383EA422CD6FB57937B578BD89335FF39C1BF83EDBC63D8477657D646F33625CF47A3038916984AA543003CAA384279D14595D99CEB7893818C02F3F4C6628C69C4DF490BD48074C3C5445168692EB72A2A0B992108DF67473210C883C079A4674CEF1A0BA9EFA69D2686DC9562EAEAB23B76713C4C531D330042ADC64530717353C8C1268B90D5B6FFD696AD3EA663D3CBF6D08B3D271B753D15AC49371FC891AEDFBB61FF91183D59CF8CCACA1F22D55270817D280EE9808804A0E8999C022F4ABBEA48AF649C87B8717947AB19CC28C253A5F66927998B551BA75C5D56B261D9BBD65261128D840708646EBDA299571A48FA01F8048CC67E61F96C175AAD223C9EB51814407E3D71923A4471691BCE6921FC5DC2672D859E6104A25BBCB03B78F56356CB013458FD7A9B92351113C8A42063FAB504AA33AA38D5144A1300E5198328C729439EA53EC2F5939FDB2877D542D8357E777009516D12ADAAB19B12E957A69AC6B02474EBF9A56F7FE924F21EC896D909095A18C651C6434614F8B267FDADAC232B14C6D8CF656B089BD6E6D42B63BBDBABFE56ED3DB47CA5913F9C88DBC78BAE5F5FDCA";
+
+        String mString = "F7F7E81932219A3713D1DB2C9A3FF2C663502B63DEC74E774C178233BFDF92F3";
+
+        String kString = "2F361290F7F289EED298858F894380233FEA7BD2D049346B3D975DEDF756A9DE";
+
+        String cString = "D88071CBA8DC30519C0974486140744D7E5D777400BA4462BF60844073CBEC44BD349FEACADEAEC93DEC77B21727E606D401591E36E069551EDB42A35A28D86B1BAAAD1CD0C4F311194BBCA5103980C9B65F1C798077D4AE3ADF3FFCB301024C4987A5F3825C2D561D0CB00EEF3CB078B7ADE3638BF340A71E6DF6E2DF8900F3B986E1BB0B9F14167A7AECC855F429E90EBB7785660CCA32D60C96CDE69B28B54001D25B22CA4BF1D66DD245A7292F98A4155D3887BD2971B8575403EA4EB4C77D8BAC8DA2FBF5732F1C1FC22C32F3E9701D92595E6BE185008F1881D569B8421A9CC71FAB467AFA9F2F802D014307817F225655588BC45603661182F9CAA1445E69158AF0FEC173F8DADEBE06204994915181417062511A845E683A217BF682017C72C41923BE29CAA2A3048F51199702C012CC0593D8D2891039020DD2BFEEA5C46C8E70C489BC287A134636F9578D503BAEC4F4646377312AF78099F434D502CCFFE61E861C365C38CB6151C059DE22661F03AF2891D69287F04315604CD8F00C46C422F6E3981E141EBCD8D9CDFE9E95CC0EF0C6630A4EBBEEC3BDF26E1F95A38C514526C8D2539D9E0B01273544D8ED645EFF30C15534A6EDAC1BD585EA927F3A3BD4F24E202FC49510945CC98C492687037B202F5A5ABEE1F4631FBCDA98EAD48A8038EEFC624D32D56164C54D44B4EC7878561FC2AA6EE28343074C7630669A7D4D3B099ED3E2F72551F9DF8228659378DD7663FA7BEBA45F2A6DD420C7E30C640CA49A755AA4E11EDD4225781D62FF3A89937D4427C044BAC0DE56509A5B92EC078F66EA6507D80D304E05B5A3424E9DDF2C45C9CBD475602A129C143F9C6EBFB0F446C6BABCADB9F5D7FB2F12CB3549BF2BA12F89209B1D68DE077B6CB274E635725153ADAF24B4DC9F6BB96EB934335564C08D7ED8171DF05F44A5019767C880D71CDAD9EEFD318D009FC185DCA94C213493D8D3A8BC979687728EEDB7E34A1FBF50814AF6836382A78C534871B9784FADB40F86C2FE2486F55D3A90222FFE3C6FC991646F7EFDB8C9C1C330EE07230DBB4A2433358088E4DE1925";
+
+        byte[] dk = java.util.HexFormat.of().parseHex(dkString);
+
+        byte[] m = java.util.HexFormat.of().parseHex(mString);
+
+        byte[] k = java.util.HexFormat.of().parseHex(kString);
+
+        byte[] c = java.util.HexFormat.of().parseHex(cString);
+
+        MLKEMApplet applet = new MLKEMApplet((short) 2);
+
+        applet.packedDK = dk;
+
+        applet.encaps512Internal(m);
+
+        assertArrayEquals(k, applet.secretKey,"Secret Key generation failed");
+
+        assertArrayEquals(c, applet.bufC,"Ciphertext generation failed");
+    }
+}
