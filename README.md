@@ -9,11 +9,24 @@ Este trabalho foi realizado por Fernando A. Penido, orientado por Marco A. Henri
 Para tal fim, são utilizadas técnicas de otimização como buffers globais e geração de vetores sob demanda para contornar limitações de memória e processamento nesses ambientes restritos.
 O consumo de memória alcançado permite implementar o ML-KEM em cartões com recursos restritos e menos de 7 kB de RAM, impulsionando ainda mais a adoção da criptografia pós-quântica em redes móveis.
 
-# Estrutura do readme.md
+# Estrutura do readme.md e organização do repositório
 
 Este repositório contém um arquivo README.md detalhando a estrutura do projeto, incluindo informações sobre a organização dos diretórios e arquivos, considerações de segurança, bem como instruções para instalação, execução de testes e experimentos.
+As seções estão separadas abaixo:
 
-
+* [Implementação do ML-KEM em smart cards](#implementação-e-avaliação-do-algoritmo-pós-quântico-ml-kem-em-smart-cards)
+* [Estrutura do readme.md e organização do repositório](#estrutura-do-readmemd-e-organização-do-repositório)
+* [Selos Considerados](#selos-considerados)
+* [Informações básicas](#informações-básicas)
+* [Dependências](#dependências)
+* [Preocupações com segurança](#preocupações-com-segurança)
+* [Instalação](#instalação)
+* [Teste mínimo](#teste-mínimo)
+* [Experimentos](#experimentos)
+* [Reivindicação #1: Corretude do Algoritmo (Testes NIST)](#reivindicação-1-corretude-do-algoritmo-testes-nist)
+* [Reivindicação #2: Consumo de Memória](#reivindicação-2-consumo-de-memória)
+* [Reivindicação #3: Tempo de execução do Applet](#reivindicação-3-tempo-de-execução-do-applet)
+* [LICENSE](#license)
 
 O repositório está organizado da seguinte forma:
 ```text
