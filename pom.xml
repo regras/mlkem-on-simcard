@@ -42,9 +42,10 @@
         </dependency>
 
         <dependency>
-            <groupId>com.licel</groupId>
+            <groupId>com.klinec</groupId>
             <artifactId>jcardsim</artifactId>
-            <version>3.0.5</version>
+            <version>3.0.6.0</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
@@ -57,12 +58,6 @@
             <artifactId>jmh-generator-annprocess</artifactId>
             <version>1.37</version>
             <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>oracle.javacard</groupId>
-            <artifactId>api_classic</artifactId>
-            <version>3.0.5</version>
         </dependency>
     </dependencies>
     <build>
