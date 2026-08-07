@@ -52,7 +52,7 @@ Informações relacionadas a benchmarks utilizados e dependências para a execu�
 
 # Preocupações com segurança
 
-Apesar de o artefato ser executado em um ambiente simulado e não expor nenhum dado sensível, o código foi alterado para facilitar o processo de testes.
+Esse código não apresenta nenhum risco para os avaliadores, porém, é importante ressaltar que o código foi alterado para facilitar o processo de testes.
 Portanto, os métodos de geração de chaves, encapsulamento e desencapsulamento foram alterados para permitir a injeção de vetores de teste do NIST.
 Além disso, buffers como 'packedDK' (a chave de desencapsulamento) e 'secretKey' (a chave secreta) foram expostos para permitir a validação dos resultados.
 
