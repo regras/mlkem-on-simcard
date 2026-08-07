@@ -35,7 +35,7 @@ mlkem-on-simcard/
 │
 ├── pom.xml                               # Gerenciador de dependências (Maven, jCardSim, JUnit)
 └── README.md                             # Documentação de avaliação do artefato
-
+```
 # Selos Considerados
 
 Os selos considerados para avaliação são: Artefatos Disponíveis (SeloD), Artefatos Funcionais (SeloF), Artefatos Sustentáveis (SeloS) e Experimentos Reprodutíveis (SeloR).
