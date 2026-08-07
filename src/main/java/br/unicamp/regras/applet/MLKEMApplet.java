@@ -1,4 +1,4 @@
-package org.example;
+package br.unicamp.regras.applet;
 
 import javacard.framework.*;
 
@@ -184,12 +184,12 @@ public class MLKEMApplet extends Applet {
     protected static short[] bufPolyTemp;
     private static byte[] hashBuffer;
     private static byte[] seedBuf;
-    private static byte[] secretKey;
+    public static byte[] secretKey;
     //    static byte[] packedEK;
-    private static byte[] packedDK;
+    public static byte[] packedDK;
     private static RandomData sr;
     private static byte[] message;
-    protected static byte[] bufC;
+    public static byte[] bufC;
     protected static byte[] bufCRed;
     public static byte klevel;
 
@@ -1782,6 +1782,22 @@ public class MLKEMApplet extends Applet {
         }
     }
 
+
+    /**
+     * Instance method wrapper to generate an ML-KEM-512 key pair with random seed
+     */
+    public static void generateKeys512() {
+        try {
+            sr.generateData(seedBuf, (short) 0, (short) paramsSymBytes);
+
+            sr.generateData(seedBuf, (short) 32, (short) paramsSymBytes);
+
+            generateKeys512Internal(seedBuf);
+        } catch (Exception ex) {
+            ISOException.throwIt(ISO7816.SW_UNKNOWN);
+        }
+    }
+
     /**
      * Generates an ML-KEM-768 key pair (K=3) from a seed
      *
@@ -1808,28 +1824,13 @@ public class MLKEMApplet extends Applet {
     /**
      * Instance method wrapper to generate an ML-KEM-768 key pair with random seed
      */
-    private void generateKeys768() {
+    public static void generateKeys768() {
         try {
             sr.generateData(seedBuf, (short) 0, (short) paramsSymBytes);
 
             sr.generateData(seedBuf, (short) 32, (short) paramsSymBytes);
 
             generateKeys768Internal(seedBuf);
-        } catch (Exception ex) {
-            ISOException.throwIt(ISO7816.SW_UNKNOWN);
-        }
-    }
-
-    /**
-     * Instance method wrapper to generate an ML-KEM-512 key pair with random seed
-     */
-    private void generateKeys512() {
-        try {
-            sr.generateData(seedBuf, (short) 0, (short) paramsSymBytes);
-
-            sr.generateData(seedBuf, (short) 32, (short) paramsSymBytes);
-
-            generateKeys512Internal(seedBuf);
         } catch (Exception ex) {
             ISOException.throwIt(ISO7816.SW_UNKNOWN);
         }
@@ -1861,7 +1862,7 @@ public class MLKEMApplet extends Applet {
     /**
      * Instance method wrapper to generate an ML-KEM-1024 key pair with random seed
      */
-    private void generateKeys1024() {
+    public static void generateKeys1024() {
         try {
             sr.generateData(seedBuf, (short) 0, (short) paramsSymBytes);
 
@@ -1971,7 +1972,7 @@ public class MLKEMApplet extends Applet {
     /**
      * ML-KEM-512 encapsulation with random message generation
      */
-    private static void encapsulation512() {
+    public static void encapsulation512() {
         sr.generateData(message, (short) 0, (short) paramsSymBytes);
 
         encaps512Internal(message);
@@ -1986,7 +1987,7 @@ public class MLKEMApplet extends Applet {
      *
      * @param m the message bytes (32 bytes)
      */
-    private static void encaps768Internal(byte[] m) {
+    public static void encaps768Internal(byte[] m) {
         short paramsK = 3;
         reset();
         absorb(m, (short) 0, (short) 32, paramsSHA3_512_Rate,  SHA3padding);
@@ -2001,7 +2002,7 @@ public class MLKEMApplet extends Applet {
     /**
      * ML-KEM-768 encapsulation with random message generation
      */
-    private static void encapsulation768() {
+    public static void encapsulation768() {
         sr.generateData(message, (short) 0, (short) paramsSymBytes);
 
         encaps768Internal(message);
@@ -2016,7 +2017,7 @@ public class MLKEMApplet extends Applet {
      *
      * @param m the message bytes (32 bytes)
      */
-    private static void encaps1024Internal(byte[] m) {
+    public static void encaps1024Internal(byte[] m) {
         short paramsK = 4;
         reset();
         absorb(m, (short) 0, (short) 32, paramsSHA3_512_Rate,  SHA3padding);
@@ -2031,7 +2032,7 @@ public class MLKEMApplet extends Applet {
     /**
      * ML-KEM-1024 encapsulation with random message generation
      */
-    private static void encapsulation1024() {
+    public static void encapsulation1024() {
         sr.generateData(message, (short) 0, (short) paramsSymBytes);
 
         encaps1024Internal(message);
@@ -2114,7 +2115,7 @@ public class MLKEMApplet extends Applet {
     /**
      * ML-KEM-512 decapsulation wrapper
      */
-    private static void decapsulation512() {
+    public static void decapsulation512() {
         decaps512Internal(message);
     }
 
@@ -2149,7 +2150,7 @@ public class MLKEMApplet extends Applet {
     /**
      * ML-KEM-768 decapsulation wrapper
      */
-    private static void decapsulation768() {
+    public static void decapsulation768() {
         decaps768Internal(message);
     }
 
@@ -2184,7 +2185,7 @@ public class MLKEMApplet extends Applet {
     /**
      * ML-KEM-1024 decapsulation wrapper
      */
-    private static void decapsulation1024() {
+    public static void decapsulation1024() {
         decaps1024Internal(message);
     }
 }

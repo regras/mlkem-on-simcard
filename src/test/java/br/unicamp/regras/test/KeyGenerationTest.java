@@ -1,7 +1,7 @@
-package com.swiftcryptollc.crypto.provider;
+package br.unicamp.regras.test;
 
-// ...existing code...
-import com.swiftcryptollc.crypto.applet.MLKEMApplet;
+import br.unicamp.regras.applet.MLKEMApplet;
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -26,6 +26,9 @@ public class KeyGenerationTest {
         byte[] secretKey;
     }
 
+    /**
+        * This test method iterates through all parameter sets (ML-KEM-512, ML-KEM-768, ML-KEM-1024) of Key Generation
+     */
     @Test
     public void testAllKeyGenerationVectors_AllLevels() {
         String[] parameterSets = new String[]{"ML-KEM-512", "ML-KEM-768", "ML-KEM-1024"};
@@ -53,39 +56,43 @@ public class KeyGenerationTest {
         System.out.println("KeyGenerationTest: Total tested vectors across levels: " + totalTested);
     }
 
+    /**
+        * This method tests key generation for a specific parameter set using the provided test vector.
+        * It combines the d and z values into a seed, initializes the MLKEMApplet for the given security level,
+        * invokes the appropriate key generation method, and then compares the generated keys with the expected values.
+        @param tv The test vector containing d, z, expected public key, and expected secret key.
+        @param parameterSet The parameter set to test (e.g., "ML-KEM-512", "ML-KEM-768", "ML-KEM-1024").
+        @throws Exception If any error occurs during key generation or comparison.
+     */
     private void testKeyGenerationForParameter(KeyGenTestVector tv, String parameterSet) throws Exception {
         // Combine d and z into a 64-byte seed (d is first 32 bytes, z is second 32 bytes)
         byte[] seed = new byte[64];
         System.arraycopy(tv.d, 0, seed, 0, 32);
         System.arraycopy(tv.z, 0, seed, 32, 32);
 
-        // Map parameterSet to paramsK and the internal constructor level used by MLKEMApplet
         int paramsK;
         short ctorLevel;
         switch (parameterSet) {
             case "ML-KEM-512":
-                paramsK = 2; // Kyber512
-                ctorLevel = 1; // constructor treats 1 or 2 as 512
+                paramsK = 2;
+                ctorLevel = 1;
                 break;
             case "ML-KEM-768":
-                paramsK = 3; // Kyber768
+                paramsK = 3;
                 ctorLevel = 3;
                 break;
             case "ML-KEM-1024":
-                paramsK = 4; // Kyber1024
+                paramsK = 4;
                 ctorLevel = 5;
                 break;
             default:
                 throw new IllegalArgumentException("Unknown parameter set: " + parameterSet);
         }
 
-        // Ensure MLKEMApplet static state is initialized for this security level by invoking its private constructor
         Constructor<MLKEMApplet> ctor = MLKEMApplet.class.getDeclaredConstructor(short.class);
         ctor.setAccessible(true);
-        // instantiate to initialize static buffers (constructor sets packedDK based on level)
         ctor.newInstance(ctorLevel);
 
-        // Call the appropriate generator
         switch (parameterSet) {
             case "ML-KEM-512":
                 MLKEMApplet.generateKeys512Internal(seed);
@@ -98,13 +105,10 @@ public class KeyGenerationTest {
                 break;
         }
 
-        // Access the static packedDK field to extract the keys
         byte[] packedDK = MLKEMApplet.packedDK;
 
-        // Extract the full private key (dk) using expected length from test vector
         byte[] generatedDK = Arrays.copyOfRange(packedDK, 0, tv.secretKey.length);
 
-        // Compute public key offset and extract expected length
         int pkOffset = paramsK * MLKEMApplet.paramsPolyBytes;
         if (pkOffset + tv.publicKey.length > packedDK.length) {
             throw new AssertionError("Packed DK too small for expected public key extraction for " + parameterSet);
@@ -117,12 +121,18 @@ public class KeyGenerationTest {
                 "Public Key mismatch for vector " + tv.count + " (" + parameterSet + ")");
     }
 
+    /**
+     * This function loads the test vectors from the JSON file
+     * @param filename name of the JSON file
+     * @param parameterSet specific parameter (ML-KEM-512, ML-KEM-768, ML-KEM-1024)
+     * @return list of test vectors
+     */
     private List<KeyGenTestVector> loadTestVectorsFromJSON(String filename, String parameterSet) {
         List<KeyGenTestVector> vectors = new ArrayList<>();
 
         try {
             InputStream inputStream = Thread.currentThread().getContextClassLoader()
-                    .getResourceAsStream("assets/" + filename);
+                    .getResourceAsStream(filename);
 
             if (inputStream == null) {
                 fail("Test vector file not found: " + filename);
@@ -164,6 +174,11 @@ public class KeyGenerationTest {
         return vectors;
     }
 
+    /**
+     * Tranforms the hexadecimal numbers in the test vector to the byte format
+     * @param hex the hexadecimal string
+     * @return the byte equivalent
+     */
     private byte[] hexToBytes(String hex) {
         int len = hex.length();
         byte[] bytes = new byte[len / 2];

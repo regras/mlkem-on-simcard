@@ -1,23 +1,17 @@
-package com.swiftcryptollc.crypto.provider;
+package br.unicamp.regras.test;
 
-import org.junit.jupiter.api.Test;
+import br.unicamp.regras.applet.MLKEMApplet;
 
-import java.security.KeyPair;
-
-import com.swiftcryptollc.crypto.applet.MLKEMApplet;
-
-import static org.junit.jupiter.api.Assertions.*;
 import org.openjdk.jmh.annotations.*;
 import java.util.concurrent.TimeUnit;
 
-// Configurações do JMH
-@BenchmarkMode(Mode.AverageTime) // Queremos medir o tempo médio de execução
-@OutputTimeUnit(TimeUnit.MICROSECONDS) // O resultado será em microsegundos
-@State(Scope.Thread) // Mantém o estado isolado por thread
-@Warmup(iterations = 3, time = 1, timeUnit = TimeUnit.SECONDS) // Tempo para a JVM otimizar
-@Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS) // Medição real
-@Fork(2) // Roda em uma JVM separada para garantir isolamento
-public class KeyAgreementJMH {
+@BenchmarkMode(Mode.AverageTime)
+@OutputTimeUnit(TimeUnit.MICROSECONDS)
+@State(Scope.Thread)
+@Warmup(iterations = 3, time = 1, timeUnit = TimeUnit.SECONDS)
+@Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
+@Fork(2)
+public class TimeTest_MLKEMApplet {
     private MLKEMApplet applet;
     private byte[] aliceGeneratedSecretKey;
     private byte[] bobGeneratedSecretKey;
@@ -111,24 +105,12 @@ public class KeyAgreementJMH {
         return true;
     }
 
-    @Benchmark
-    public boolean generatePoly(){
-        MLKEMApplet.getNoisePoly(seed512, (short) 0, (byte) 2, 3, poly, (short) 0);
-        return (poly[1] == 0);
-    }
-
-    @Benchmark
-    public boolean generateMatrixTest(){
-        MLKEMApplet.generateMatrix(seed512, false, 3, (short) 0, (short) 1, poly);
-        return (poly[1] == 0);
-    }
-
     public static void main(String[] args) throws Exception {
         org.openjdk.jmh.runner.options.Options opt = new org.openjdk.jmh.runner.options.OptionsBuilder()
                 // Pega todos os @Benchmark dentro de MLKEMBenchmark
-                .include(KeyAgreementJMH.class.getSimpleName() + ".generatePoly")
-                .include(KeyAgreementJMH.class.getSimpleName() + ".generateMatrixTest")
-                .param("securityLevel", "512")
+                .include(TimeTest_MLKEMApplet.class.getSimpleName() + ".keyGen")
+                .include(TimeTest_MLKEMApplet.class.getSimpleName() + ".encaps")
+                .include(TimeTest_MLKEMApplet.class.getSimpleName() + ".decaps")
                 .build();
         new org.openjdk.jmh.runner.Runner(opt).run();
     }
