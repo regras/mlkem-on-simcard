@@ -164,24 +164,11 @@ public class TimeTest_KyberJCE {
         return true;
     }
 
-    @Benchmark
-    public boolean generatePoly(){
-        Poly.getNoisePoly(seed512, (byte) 2, 3);
-        return true;
-    }
-
-    @Benchmark
-    public boolean generateMatrix(){
-        Indcpa.generateMatrix(seed512, false, 3);
-        return true;
-    }
-
     public static void main(String[] args) throws Exception {
         org.openjdk.jmh.runner.options.Options opt = new org.openjdk.jmh.runner.options.OptionsBuilder()
-                // Pega todos os @Benchmark dentro de MLKEMBenchmark
-                .include(TimeTest_KyberJCE.class.getSimpleName() + ".keyGen")
-                .include(TimeTest_KyberJCE.class.getSimpleName() + ".encaps")
-                .include(TimeTest_KyberJCE.class.getSimpleName() + ".decaps")
+                .include(TimeTest_KyberJCE.class.getSimpleName() + "keyGen")
+                .include(TimeTest_KyberJCE.class.getSimpleName() + "encaps")
+                .include(TimeTest_KyberJCE.class.getSimpleName() + "decaps")
                 .build();
         new org.openjdk.jmh.runner.Runner(opt).run();
     }

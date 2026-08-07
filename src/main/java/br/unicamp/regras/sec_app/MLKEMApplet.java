@@ -1,4 +1,4 @@
-package br.unicamp.regras.applet;
+package br.unicamp.regras.sec_app;
 
 import javacard.framework.*;
 
@@ -124,16 +124,16 @@ public class MLKEMApplet extends Applet {
     public static final byte[] rc23 = {(byte) 0x80, (byte) 0x00, (byte) 0x00,
             (byte) 0x00, (byte) 0x80, (byte) 0x00, (byte) 0x80, (byte) 0x08};
 
-    public static byte[] state;
-    public static byte[] B;
-    public static byte[] C;
-    public static byte[] D;
-    public static byte[] buff;
-    public static byte[] buff1;
-    public static byte[] buff2;
-    public static byte[] buff3;
-    public static short[] sb;
-    public static boolean[] bb;
+    private static byte[] state;
+    private static byte[] B;
+    private static byte[] C;
+    private static byte[] D;
+    private static byte[] buff;
+    private static byte[] buff1;
+    private static byte[] buff2;
+    private static byte[] buff3;
+    private static short[] sb;
+    private static boolean[] bb;
 
     private static short pos;           // Posição atual no bloco
     private static boolean isSqueezing; // Trava de segurança entre Absorb e Squeeze
@@ -190,12 +190,12 @@ public class MLKEMApplet extends Applet {
     protected static short[] bufPolyTemp;
     private static byte[] hashBuffer;
     private static byte[] seedBuf;
-    public static byte[] secretKey;
+    private static byte[] secretKey;
     //    static byte[] packedEK;
-    public static byte[] packedDK;
+    private static byte[] packedDK;
     private static RandomData sr;
     private static byte[] message;
-    public static byte[] bufC;
+    private static byte[] bufC;
     protected static byte[] bufCRed;
     public static byte klevel;
 
@@ -272,7 +272,7 @@ public class MLKEMApplet extends Applet {
         }
 
         // Passes the security level to the constructor
-        new MLKEMApplet(kLevel).register(bArray, (short) (bOffset + 1), bArray[bOffset]);
+        new br.unicamp.regras.sec_app.MLKEMApplet(kLevel).register(bArray, (short) (bOffset + 1), bArray[bOffset]);
     }
 
     public final static byte INS_GENERATE_KEYS = (byte) 0x01; // generate the pair of keys
@@ -650,7 +650,7 @@ public class MLKEMApplet extends Applet {
     /**
      * Resets all Keccak buffers and state variables to their initial values
      */
-    public static void reset() {
+    private static void reset() {
         Util.arrayFillNonAtomic(state, (short) 0, (short) state.length, (byte) 0x00);
         Util.arrayFillNonAtomic(B, (short) 0, (short) B.length, (byte) 0x00);
         Util.arrayFillNonAtomic(C, (short) 0, (short) C.length, (byte) 0x00);
@@ -845,8 +845,8 @@ public class MLKEMApplet extends Applet {
      * @param sBuff4 temporary variable for position calculation
      */
     private static void rotl64(byte[] a, short offset, short amt, byte[] buff,
-                              short buffOffset, short sBuff1, short sBuff2, short sBuff3,
-                              short sBuff4) {
+                               short buffOffset, short sBuff1, short sBuff2, short sBuff3,
+                               short sBuff4) {
         sBuff1 = (short) (amt % 8);
         sBuff2 = (short) (amt / 8);
         buff[buffOffset] = a[offset];
@@ -1646,7 +1646,7 @@ public class MLKEMApplet extends Applet {
      * @param j the column index
      * @param r the output matrix array
      */
-    public static void generateMatrix(byte[] seed, boolean transposed, int paramsK, short i, short j, short[] r) {
+    private static void generateMatrix(byte[] seed, boolean transposed, int paramsK, short i, short j, short[] r) {
         generateMatrix(seed, (short) 0, transposed, paramsK, i, j, r);
     }
 
@@ -1702,7 +1702,7 @@ public class MLKEMApplet extends Applet {
     }
 
     /**
-     * Generates public and private keys for the CPA-secure encryption scheme underlying ML-KEM
+     * Generates private and private keys for the CPA-secure encryption scheme underlying ML-KEM
      *
      * @param paramsK the security parameter (2 for ML-KEM-512, 3 for ML-KEM-768, 4 for ML-KEM-1024)
      * @param originalSeed the original seed bytes for key generation
@@ -1770,7 +1770,7 @@ public class MLKEMApplet extends Applet {
      *
      * @param seed the seed bytes for key generation
      */
-    public static void generateKeys512Internal(byte[] seed) {
+    private static void generateKeys512Internal(byte[] seed) {
         int paramsK = 2;
         try {
             //copy first z into the secret key as the buffer will be reused
@@ -1791,7 +1791,7 @@ public class MLKEMApplet extends Applet {
     /**
      * Instance method wrapper to generate an ML-KEM-512 key pair with random seed
      */
-    public static void generateKeys512() {
+    private static void generateKeys512() {
         try {
             sr.generateData(seedBuf, (short) 0, (short) paramsSymBytes);
 
@@ -1808,7 +1808,7 @@ public class MLKEMApplet extends Applet {
      *
      * @param seed the seed bytes for key generation
      */
-    public static void generateKeys768Internal(byte[] seed) {
+    private static void generateKeys768Internal(byte[] seed) {
         int paramsK = 3;
         try {
             //copy first z into the secret key as the buffer will be reused
@@ -1829,7 +1829,7 @@ public class MLKEMApplet extends Applet {
     /**
      * Instance method wrapper to generate an ML-KEM-768 key pair with random seed
      */
-    public static void generateKeys768() {
+    private static void generateKeys768() {
         try {
             sr.generateData(seedBuf, (short) 0, (short) paramsSymBytes);
 
@@ -1846,7 +1846,7 @@ public class MLKEMApplet extends Applet {
      *
      * @param seed the seed bytes for key generation
      */
-    public static void generateKeys1024Internal(byte[] seed) {
+    private static void generateKeys1024Internal(byte[] seed) {
         int paramsK = 4;
         try {
             //copy first z into the secret key as the buffer will be reused
@@ -1867,7 +1867,7 @@ public class MLKEMApplet extends Applet {
     /**
      * Instance method wrapper to generate an ML-KEM-1024 key pair with random seed
      */
-    public static void generateKeys1024() {
+    private static void generateKeys1024() {
         try {
             sr.generateData(seedBuf, (short) 0, (short) paramsSymBytes);
 
@@ -1880,7 +1880,7 @@ public class MLKEMApplet extends Applet {
     }
 
     /**
-     * CPA encryption: encrypts a message using the public key to produce ciphertext
+     * CPA encryption: encrypts a message using the private key to produce ciphertext
      *
      * @param m the message bytes (32 bytes)
      * @param coins the randomness/coins for encryption
@@ -1961,7 +1961,7 @@ public class MLKEMApplet extends Applet {
      *
      * @param m the message bytes (32 bytes)
      */
-    public static void encaps512Internal(byte[] m) {
+    private static void encaps512Internal(byte[] m) {
         short paramsK = 2;
         reset();
         absorb(m, (short) 0, (short) 32, paramsSHA3_512_Rate,  SHA3padding);
@@ -1977,7 +1977,7 @@ public class MLKEMApplet extends Applet {
     /**
      * ML-KEM-512 encapsulation with random message generation
      */
-    public static void encapsulation512() {
+    private static void encapsulation512() {
         sr.generateData(message, (short) 0, (short) paramsSymBytes);
 
         encaps512Internal(message);
@@ -1992,7 +1992,7 @@ public class MLKEMApplet extends Applet {
      *
      * @param m the message bytes (32 bytes)
      */
-    public static void encaps768Internal(byte[] m) {
+    private static void encaps768Internal(byte[] m) {
         short paramsK = 3;
         reset();
         absorb(m, (short) 0, (short) 32, paramsSHA3_512_Rate,  SHA3padding);
@@ -2007,7 +2007,7 @@ public class MLKEMApplet extends Applet {
     /**
      * ML-KEM-768 encapsulation with random message generation
      */
-    public static void encapsulation768() {
+    private static void encapsulation768() {
         sr.generateData(message, (short) 0, (short) paramsSymBytes);
 
         encaps768Internal(message);
@@ -2022,7 +2022,7 @@ public class MLKEMApplet extends Applet {
      *
      * @param m the message bytes (32 bytes)
      */
-    public static void encaps1024Internal(byte[] m) {
+    private static void encaps1024Internal(byte[] m) {
         short paramsK = 4;
         reset();
         absorb(m, (short) 0, (short) 32, paramsSHA3_512_Rate,  SHA3padding);
@@ -2037,7 +2037,7 @@ public class MLKEMApplet extends Applet {
     /**
      * ML-KEM-1024 encapsulation with random message generation
      */
-    public static void encapsulation1024() {
+    private static void encapsulation1024() {
         sr.generateData(message, (short) 0, (short) paramsSymBytes);
 
         encaps1024Internal(message);
@@ -2094,7 +2094,7 @@ public class MLKEMApplet extends Applet {
      *
      * @param message the decrypted message bytes
      */
-    public static void decaps512Internal(byte[] message) {
+    private static void decaps512Internal(byte[] message) {
         short paramsK = 2;
         decrypt(message, paramsK);
         reset();
@@ -2120,7 +2120,7 @@ public class MLKEMApplet extends Applet {
     /**
      * ML-KEM-512 decapsulation wrapper
      */
-    public static void decapsulation512() {
+    private static void decapsulation512() {
         decaps512Internal(message);
     }
 
@@ -2129,7 +2129,7 @@ public class MLKEMApplet extends Applet {
      *
      * @param message the decrypted message bytes
      */
-    public static void decaps768Internal(byte[] message) {
+    private static void decaps768Internal(byte[] message) {
         short paramsK = 3;
         decrypt(message, paramsK);
         reset();
@@ -2155,7 +2155,7 @@ public class MLKEMApplet extends Applet {
     /**
      * ML-KEM-768 decapsulation wrapper
      */
-    public static void decapsulation768() {
+    private static void decapsulation768() {
         decaps768Internal(message);
     }
 
@@ -2164,7 +2164,7 @@ public class MLKEMApplet extends Applet {
      *
      * @param message the decrypted message bytes
      */
-    public static void decaps1024Internal(byte[] message) {
+    private static void decaps1024Internal(byte[] message) {
         short paramsK = 4;
         decrypt(message, paramsK);
         reset();
@@ -2190,7 +2190,7 @@ public class MLKEMApplet extends Applet {
     /**
      * ML-KEM-1024 decapsulation wrapper
      */
-    public static void decapsulation1024() {
+    private static void decapsulation1024() {
         decaps1024Internal(message);
     }
 }

@@ -127,7 +127,6 @@ public class TimeTest_MLKEMApplet {
 
     public static void main(String[] args) throws Exception {
         org.openjdk.jmh.runner.options.Options opt = new org.openjdk.jmh.runner.options.OptionsBuilder()
-                // Pega todos os @Benchmark dentro de MLKEMBenchmark
                 .include(TimeTest_MLKEMApplet.class.getSimpleName() + ".keyGen")
                 .include(TimeTest_MLKEMApplet.class.getSimpleName() + ".encaps")
                 .include(TimeTest_MLKEMApplet.class.getSimpleName() + ".decaps")
