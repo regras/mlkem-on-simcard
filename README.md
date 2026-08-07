@@ -171,7 +171,7 @@ sudo apt-get update
 sudo apt-get install -y git maven openjdk-17-jdk
 
 # Clonar o repositório do artefato
-git clone https://github.com/Fernando-pen/mlkem-on-simcard.git
+git clone https://github.com/regras/mlkem-on-simcard.git
 
 # Acessar o diretório do projeto
 cd mlkem-on-simcard
