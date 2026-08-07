@@ -108,9 +108,24 @@ Os selos considerados para avaliação são: Artefatos Disponíveis (SeloD), Art
 
 # Informações básicas
 
-Para a execução do artefato, é necessário apenas um ambiente desktop e a instalação das dependências abaixo descritas. 
+Para a execução do artefato, é necessário apenas um ambiente desktop e a instalação das dependências descritas na seção abaixo. 
 
 O artefato foi desenvolvido e testado em um ambiente Linux, mas também pode ser executado em sistemas Windows e MacOS, desde que as dependências sejam corretamente instaladas.
+
+Não é necessário nenhum hardware específico, como smart cards, para a execução do artefato, pois o Applet é executado em um simulador de Java Card (jCardSim) que simula o comportamento de um smart card em um ambiente desktop.
+
+Como recomendação, temos as seguintes especificações mínimas para o ambiente de execução:
+
+**Requisitos de Hardware:**
+- Processador: Arquitetura x86_64 ou ARM moderna
+- Memória RAM: 2 GB
+- Espaço em disco: 500 MB
+
+**Requisitos de Software:**
+- Sistema Operacional: Linux, Windows ou MacOS
+- Java Development Kit (JDK): Versão 17
+- Apache Maven: Versão 3.11.0
+- Acesso à internet para baixar dependências do Maven
 
 # Dependências
 
