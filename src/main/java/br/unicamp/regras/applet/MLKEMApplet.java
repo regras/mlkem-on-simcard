@@ -4,7 +4,13 @@ import javacard.framework.*;
 
 import javacard.security.RandomData;
 
-
+/**
+ * Implementation of the post-quantum key encapsulation mechanism (KEM) algorithm ML-KEM for the Java Card platform.
+ * For this purpose, memory optimization techniques are used, such as on-demand vector generation and reuse of global buffers.
+ * This research was developed under the PIBIC grant at the Universidade Estadual de Campinas (Unicamp).
+ *
+ * @author Fernando Penido
+ */
 public class MLKEMApplet extends Applet {
     public final static int paramsN = 256;  //polynomial size
     public final static int paramsQ = 3329; //modulus Q

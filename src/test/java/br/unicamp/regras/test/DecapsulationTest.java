@@ -15,6 +15,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+/**
+ * Test to verify the decapsulation algorithm
+ *
+ * @author Fernando Penido
+ */
 public class DecapsulationTest {
 
     static class DecapsTestVector {
@@ -68,7 +73,11 @@ public class DecapsulationTest {
             }
         }
 
-        System.out.println("DecapsulationTest: Successfully tested " + successCount + " test vectors for " + parameterSet);
+        System.out.println("\n==================================================");
+        System.out.println("[SUCESS] ML-KEM-" + parameterSet);
+        System.out.println("Operação: Decapsulation");
+        System.out.println("NIST vectors processed and evaluated: " + vectors.size());
+        System.out.println("==================================================\n");
     }
 
     /**

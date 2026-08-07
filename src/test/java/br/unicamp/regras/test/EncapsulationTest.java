@@ -14,6 +14,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+/**
+ *  * Test to verify the encapsulation algorithm
+ *
+ * @author Fernando Penido
+ */
 public class EncapsulationTest {
 
     static class EncapsTestVector {
@@ -69,7 +74,11 @@ public class EncapsulationTest {
             }
         }
 
-        System.out.println("EncapsulationTest: Successfully tested " + successCount + " test vectors for " + parameterSet);
+        System.out.println("\n==================================================");
+        System.out.println("[SUCESS] ML-KEM-" + parameterSet);
+        System.out.println("Operação: Encapsulation");
+        System.out.println("NIST vectors processed and evaluated: " + vectors.size());
+        System.out.println("==================================================\n");
     }
 
     /**

@@ -5,12 +5,17 @@ import br.unicamp.regras.applet.MLKEMApplet;
 import org.openjdk.jmh.annotations.*;
 import java.util.concurrent.TimeUnit;
 
-@BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.MICROSECONDS)
-@State(Scope.Thread)
-@Warmup(iterations = 3, time = 1, timeUnit = TimeUnit.MICROSECONDS)
-@Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.MICROSECONDS)
-@Fork(2)
+/**
+ *  * Test to measure the simulated time used by the MLKEMApplet main functions
+ *
+ * @author Fernando Penido
+ */
+@BenchmarkMode(Mode.AverageTime) // average time is being measure
+@OutputTimeUnit(TimeUnit.MICROSECONDS) // with microseconds as unit
+@State(Scope.Thread) // the state is isolated by thread
+@Warmup(iterations = 3, time = 1, timeUnit = TimeUnit.SECONDS) // warmup iterations
+@Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS) // number of measurements
+@Fork(1) // isolate the virtual machine
 public class TimeTest_MLKEMApplet {
     private MLKEMApplet applet;
     private byte[] aliceGeneratedSecretKey;

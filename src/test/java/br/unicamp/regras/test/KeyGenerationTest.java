@@ -16,6 +16,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+/**
+ *  * Test to verify the key generation algorithm
+ *
+ * @author Fernando Penido
+ */
 public class KeyGenerationTest {
 
     static class KeyGenTestVector {
@@ -49,11 +54,13 @@ public class KeyGenerationTest {
                 }
             }
 
-            System.out.println("KeyGenerationTest: Successfully tested " + successCount + " test vectors for " + paramSet);
+            System.out.println("\n==================================================");
+            System.out.println("[SUCESS] ML-KEM-" + paramSet);
+            System.out.println("Operação: Key Generation");
+            System.out.println("NIST vectors processed and evaluated: " + successCount);
+            System.out.println("==================================================\n");
             totalTested += successCount;
         }
-
-        System.out.println("KeyGenerationTest: Total tested vectors across levels: " + totalTested);
     }
 
     /**
