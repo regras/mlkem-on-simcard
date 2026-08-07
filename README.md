@@ -15,6 +15,7 @@ Resumo descrevendo o objetivo do artefato, com o respectivo título e resumo do 
 Este repositório contém um arquivo README.md detalhando a estrutura do projeto, incluindo informações sobre a organização dos diretórios e arquivos, considerações de segurança, bem como instruções para instalação, execução de testes e experimentos.
 
 O repositório está organizado da seguinte forma:
+```text
 mlkem-on-simcard/
 ├── src/
 │   ├── main/java/br/unicamp/ic/mlkem/
@@ -79,4 +80,4 @@ Esta seção deve descrever um passo a passo para a execução e obtenção dos 
 
 # LICENSE
 
-Apresente a licença[cite: 1].
+Este projeto está licenciado sob a Licença MIT. Detalhes completos podem ser encontrados no arquivo `LICENSE` na raiz deste repositório, que também inclui os avisos de direitos autorais e atribuições aos projetos ThothTrust e KyberJCE utilizados como base para esta implementação.
