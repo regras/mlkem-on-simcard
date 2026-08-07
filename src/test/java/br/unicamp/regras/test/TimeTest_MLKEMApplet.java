@@ -8,8 +8,8 @@ import java.util.concurrent.TimeUnit;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MICROSECONDS)
 @State(Scope.Thread)
-@Warmup(iterations = 3, time = 1, timeUnit = TimeUnit.SECONDS)
-@Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
+@Warmup(iterations = 3, time = 1, timeUnit = TimeUnit.MICROSECONDS)
+@Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.MICROSECONDS)
 @Fork(2)
 public class TimeTest_MLKEMApplet {
     private MLKEMApplet applet;
@@ -22,6 +22,9 @@ public class TimeTest_MLKEMApplet {
     @Param({"512", "768", "1024"})
     private int securityLevel;
 
+    /**
+     * Sets the configuration of the Applet and initializes it
+     */
     @Setup(Level.Trial)
     public void setupApplet() {
         aliceGeneratedSecretKey = new byte[32];
@@ -51,6 +54,10 @@ public class TimeTest_MLKEMApplet {
         }
     }
 
+    /**
+     * Marks the time for the key generation process.
+     * @return true (to avoid JMH optimizations that might skip the method)
+     */
     @Benchmark
     public boolean keyGen(){
         switch(securityLevel){
@@ -69,6 +76,10 @@ public class TimeTest_MLKEMApplet {
         return true;
     }
 
+    /**
+     * Marks the time for the encapsulation process.
+     * @return true (to avoid JMH optimizations that might skip the method)
+     */
     @Benchmark
     public boolean encaps(){
         switch (securityLevel) {
@@ -87,6 +98,10 @@ public class TimeTest_MLKEMApplet {
         return true;
     }
 
+    /**
+     * Marks the time for the decapsulation process.
+     * @return true (to avoid JMH optimizations that might skip the method)
+     */
     @Benchmark
     public boolean decaps(){
         switch (securityLevel) {
