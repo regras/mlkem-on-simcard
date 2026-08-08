@@ -83,6 +83,18 @@
                     </compilerArgs>
                 </configuration>
             </plugin>
+
+            <!-- PLUGIN ADICIONADO PARA IGNORAR OS BENCHMARKS NOS TESTES -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/Time_*.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>
