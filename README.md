@@ -100,8 +100,17 @@ mlkem-on-simcard/
 │       
 ├── pom.xml                               # Gerenciador de dependências (Maven, jCardSim, JUnit)
 └── README.md                             # Documentação de avaliação do artefato
-│
 ```
+Devido à sobrecarga que múltiplas classes e objetos introduzem, como descrito no artigo, a lógica inteira do ML-KEM está presente em uma só classe. 
+Para facilitar a visualização e compreensão do código, foram separadas cada lógica de execução por um separador de comentários, que descreve qual o tipo das operações seguintes.
+Dentres os tipos, estão esses:
+
+- **Funções Padrão do Java Card (linhas 245-443)**: Funções padrão do Java Card, como instalação do Applet, seleção e processamento de comandos APDU.
+- **SHAKE e SHA3 (linhas 444-919)**: Funções de hash SHAKE e SHA3, utilizadas para gerar vetores pseudo-aleatórios a partir de sementes.
+- **Operações de NTT (linhas 920-1.038)**: Funções de Transformada Rápida de Número Inteiro (NTT), utilizadas para acelerar operações polinomiais.
+- **Operações Polinomiais (linhas 1.039-1.519)**: Funções para manipulação de polinômios, incluindo adição, subtração, multiplicação e redução.
+- **Operações de Byte (linhas 1.520-1.605)**: Funções para manipulação de bytes, incluindo conversão de byte para int e vice-versa.
+- **Indistiguibilidade sob Ataque de Texto Claro Escolhido (IND-CPA) (linhas 1.606-2.203)**: Funções para geração de chaves, encapsulamento e desencapsulamento de chaves, garantindo segurança contra ataques de texto escolhido.
 # Selos Considerados
 
 Os selos considerados para avaliação são: Artefatos Disponíveis (SeloD), Artefatos Funcionais (SeloF), Artefatos Sustentáveis (SeloS) e Experimentos Reprodutíveis (SeloR).
@@ -199,7 +208,7 @@ O teste mínimo consiste em executar os testes de corretude do Applet, que valid
 Para sua execução, basta executar o comando abaixo, após a instalação das dependências e clonagem do repositório.
 
 ```bash
-mvn clean test
+mvn clean test | tee log_testes_funcionais.txt
 ```
 
 # Experimentos
@@ -350,7 +359,7 @@ Será exibido o tempo de execução em microssegundos para a geração de chaves
 
 ```bash
 # Executar os benchmarks de tempo de execução
-mvn test-compile exec:exec -Dexec.executable="java" -Dexec.classpathScope="test" -Dexec.args="-cp %classpath org.openjdk.jmh.Main"
+mvn test-compile exec:exec -Dexec.executable="java" -Dexec.classpathScope="test" -Dexec.args="-cp %classpath org.openjdk.jmh.Main -rf csv -rff resultados_benchmark.csv"
 ```
 
 O framework JMH não garante execução com resultados idênticos para cada execução, portanto, é esperado que os resultados variem entre execuções.

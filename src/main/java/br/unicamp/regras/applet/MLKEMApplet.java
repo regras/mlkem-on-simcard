@@ -242,6 +242,13 @@ public class MLKEMApplet extends Applet {
         }
     }
 
+    /*
+    -----------------------------------------------------------------------------------------
+
+                                    Java Card functions
+
+    -----------------------------------------------------------------------------------------
+     */
     public static void install(byte[] bArray, short bOffset, byte bLength) {
         // Initialize the applet
         short offset = bOffset;
