@@ -222,6 +222,8 @@ Essa reivindicação é validada pelos testes de corretude do Applet, que compar
 A execução dos testes de corretude é realizada pelo comando `mvn clean test`, que executa os testes de geração de chaves, encapsulamento e desencapsulamento do ML-KEM.
 É esperado que apareça uma mensagem de sucesso ao final da execução, indicando que todos os testes foram aprovados.
 
+Os resultados do testes são salvos no arquivo `log_testes_funcionais.txt`, que contém a saída completa do teste, incluindo mensagens de sucesso ou falha para cada teste.
+
 ## Reivindicação #2: Consumo de Memória
 
 O consumo de memória do Applet é simplesmente a soma de todas as alocações do construtor `MLKEMApplet()`, que é executado apenas uma vez durante a chamada do método `install()` (método da instalação do Applet no smart card).
@@ -361,6 +363,8 @@ Será exibido o tempo de execução em microssegundos para a geração de chaves
 # Executar os benchmarks de tempo de execução
 mvn test-compile exec:exec -Dexec.executable="java" -Dexec.classpathScope="test" -Dexec.args="-cp %classpath org.openjdk.jmh.Main -rf csv -rff resultados_benchmark.csv"
 ```
+
+O resultado estará disponível no arquivo `resultados_benchmark.csv`, que contém os tempos de execução em microssegundos para cada operação do MLKEMApplet e do KyberJCE.
 
 O framework JMH não garante execução com resultados idênticos para cada execução, portanto, é esperado que os resultados variem entre execuções.
 Além disso, diferentes ambientes de execução podem apresentar tempos diferentes, assim é importante analisar as proporções entre a execução do MLKEMApplet e do KyberJCE, que devem ser consistentes com os resultados apresentados no artigo.
