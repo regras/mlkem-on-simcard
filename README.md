@@ -163,24 +163,24 @@ A lista de funções/buffers expostos para fins de teste dentro do br.unicamp.re
 - `packedDK` (byte[]) - buffer que armazena a chave de desencapsulamento.
 - `secretKey` (byte[]) - buffer que armazena a chave secreta.
 - `bufC` (byte[]) - buffer que armazena o encapsulamento.
-- `generateKeys512Internal()` - função que gera o par de chaves ML-KEM.
-- `generateKeys768Internal()` - função que gera o par de chaves ML-KEM.
-- `generateKeys1024Internal()` - função que gera o par de chaves ML-KEM.
-- `generateKeys512()` - função que gera o par de chaves ML-KEM.
-- `generateKeys768()` - função que gera o par de chaves ML-KEM.
-- `generateKeys1024()` - função que gera o par de chaves ML-KEM.
-- `encaps512Internal()` - função que encapsula a chave secreta.
-- `encaps768Internal()` - função que encapsula a chave secreta.
-- `encaps1024Internal()` - função que encapsula a chave secreta.
-- `encaps512()` - função que encapsula a chave secreta.
-- `encaps768()` - função que encapsula a chave secreta.
-- `encaps1024()` - função que encapsula a chave secreta.
-- `decaps512Internal()` - função que desencapsula a chave secreta.
-- `decaps768Internal()` - função que desencapsula a chave secreta.
-- `decaps1024Internal()` - função que desencapsula a chave secreta.
-- `decaps512()` - função que desencapsula a chave secreta.
-- `decaps768()` - função que desencapsula a chave secreta.
-- `decaps1024()` - função que desencapsula a chave secreta.
+- `generateKeys512Internal()` - função interna da geração de chaves do ML-KEM-512.
+- `generateKeys768Internal()` - função que gera o par de chaves do ML-KEM-768.
+- `generateKeys1024Internal()` - função que gera o par de chaves do ML-KEM-1024.
+- `generateKeys512()` - função que gera o par de chaves do ML-KEM-512.
+- `generateKeys768()` - função que gera o par de chaves do ML-KEM-768.
+- `generateKeys1024()` - função que gera o par de chaves do ML-KEM-1024.
+- `encaps512Internal()` - função interna do encapsulamento da chave secreta para o ML-KEM-512.
+- `encaps768Internal()` - função interna do encapsulamento da chave secreta para o ML-KEM-768.
+- `encaps1024Internal()` - função interna do encapsulamento da chave secreta para o ML-KEM-1024.
+- `encaps512()` - função que encapsula a chave secreta do ML-KEM-512.
+- `encaps768()` - função que encapsula a chave secreta do ML-KEM-768.
+- `encaps1024()` - função que encapsula a chave secreta do ML-KEM-1024.
+- `decaps512Internal()` - função interna de desencapsulamento da chave secreta do ML-KEM-512.
+- `decaps768Internal()` - função que desencapsula a chave secreta do ML-KEM-768.
+- `decaps1024Internal()` - função que desencapsula a chave secreta do ML-KEM-1024.
+- `decaps512()` - função que desencapsula a chave secreta do ML-KEM-512.
+- `decaps768()` - função que desencapsula a chave secreta do ML-KEM-768.
+- `decaps1024()` - função que desencapsula a chave secreta do ML-KEM-1024.
 
 # Instalação
 
