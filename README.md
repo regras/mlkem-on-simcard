@@ -208,7 +208,7 @@ O teste mínimo consiste em executar os testes de corretude do Applet, que valid
 Para sua execução, basta executar o comando abaixo, após a instalação das dependências e clonagem do repositório.
 
 ```bash
-mvn clean test | tee log_testes_funcionais.txt
+mvn clean test -q | tee log_testes_funcionais.txt
 ```
 
 # Experimentos

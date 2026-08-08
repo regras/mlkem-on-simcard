@@ -4,8 +4,6 @@ import KyberJCE.provider.Kyber1024KeyPairGenerator;
 import KyberJCE.provider.Kyber512KeyPairGenerator;
 import KyberJCE.provider.Kyber768KeyPairGenerator;
 import KyberJCE.provider.KyberKeyAgreement;
-import KyberJCE.provider.kyber.Indcpa;
-import KyberJCE.provider.kyber.Poly;
 
 import java.security.InvalidKeyException;
 import java.security.KeyPair;
@@ -26,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 @Warmup(iterations = 3, time = 1, timeUnit = TimeUnit.SECONDS) // warmup iterations
 @Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS) // number of measurements
 @Fork(1) // isolate the virtual machine
-public class TimeTest_KyberJCE {
+public class Time_KyberJCE {
     private byte[] aliceGeneratedSecretKey;
     private byte[] bobGeneratedSecretKey;
     KeyPair bobKeyPair512;
@@ -166,9 +164,9 @@ public class TimeTest_KyberJCE {
 
     public static void main(String[] args) throws Exception {
         org.openjdk.jmh.runner.options.Options opt = new org.openjdk.jmh.runner.options.OptionsBuilder()
-                .include(TimeTest_KyberJCE.class.getSimpleName() + "keyGen")
-                .include(TimeTest_KyberJCE.class.getSimpleName() + "encaps")
-                .include(TimeTest_KyberJCE.class.getSimpleName() + "decaps")
+                .include(Time_KyberJCE.class.getSimpleName() + "keyGen")
+                .include(Time_KyberJCE.class.getSimpleName() + "encaps")
+                .include(Time_KyberJCE.class.getSimpleName() + "decaps")
                 .build();
         new org.openjdk.jmh.runner.Runner(opt).run();
     }

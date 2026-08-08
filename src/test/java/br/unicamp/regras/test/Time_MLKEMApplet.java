@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 @Warmup(iterations = 3, time = 1, timeUnit = TimeUnit.SECONDS) // warmup iterations
 @Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS) // number of measurements
 @Fork(1) // isolate the virtual machine
-public class TimeTest_MLKEMApplet {
+public class Time_MLKEMApplet {
     private MLKEMApplet applet;
     private byte[] aliceGeneratedSecretKey;
     private byte[] bobGeneratedSecretKey;
@@ -127,9 +127,9 @@ public class TimeTest_MLKEMApplet {
 
     public static void main(String[] args) throws Exception {
         org.openjdk.jmh.runner.options.Options opt = new org.openjdk.jmh.runner.options.OptionsBuilder()
-                .include(TimeTest_MLKEMApplet.class.getSimpleName() + ".keyGen")
-                .include(TimeTest_MLKEMApplet.class.getSimpleName() + ".encaps")
-                .include(TimeTest_MLKEMApplet.class.getSimpleName() + ".decaps")
+                .include(Time_MLKEMApplet.class.getSimpleName() + ".keyGen")
+                .include(Time_MLKEMApplet.class.getSimpleName() + ".encaps")
+                .include(Time_MLKEMApplet.class.getSimpleName() + ".decaps")
                 .build();
         new org.openjdk.jmh.runner.Runner(opt).run();
     }
