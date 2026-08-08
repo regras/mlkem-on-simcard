@@ -219,7 +219,7 @@ Os revisores devem conseguir alcançar as reivindicações apresentadas.
 ## Reivindicação #1: Corretude do Algoritmo (Testes NIST)
 
 Essa reivindicação é validada pelos testes de corretude do Applet, que comparam os resultados obtidos com os vetores de teste (KATs) do NIST.
-A execução dos testes de corretude é realizada pelo comando `mvn clean test`, que executa os testes de geração de chaves, encapsulamento e desencapsulamento do ML-KEM.
+A execução dos testes de corretude é realizada pelo comando `mvn clean test -q | tee log_testes_funcionais.txt`, que executa os testes de geração de chaves, encapsulamento e desencapsulamento do ML-KEM.
 É esperado que apareça uma mensagem de sucesso ao final da execução, indicando que todos os testes foram aprovados.
 
 Os resultados do testes são salvos no arquivo `log_testes_funcionais.txt`, que contém a saída completa do teste, incluindo mensagens de sucesso ou falha para cada teste.
