@@ -1,47 +1,48 @@
-# Implementação e avaliação do algoritmo pós-quântico ML-KEM em smart cards
-Este repositório contém a implementação do algoritmo pós-quântico de encapsulamento de chaves ML-KEM, desenvolvido para ser executado em smart cards, como SIMs e eSIMs. 
+# Implementation and evaluation of the post-quantum algorithm ML-KEM on smart cards
 
-O objetivo é fornecer uma solução de criptografia segura e eficiente para dispositivos com recursos limitados, utilizando técnicas de otimização para contornar restrições de memória e processamento.
+This repository contains the implementation of the ML-KEM post-quantum key encapsulation algorithm, designed to run on smart cards, such as SIMs and eSIMs.
 
-Este trabalho foi realizado por Fernando A. Penido, orientado por Marco A. Henriques e auxiliado por Caio Teixeira e Rodrigo D. Meneses, no programa de iniciação científica da Unicamp, com apoio da Coordenação de Aperfeiçoamento de Pessoal de Nível Superior (CAPES) e do Conselho Nacional de Desenvolvimento Científico e Tecnológico (CNPq).
+The goal is to provide a secure and efficient cryptography solution for resource-constrained devices, using optimization techniques to bypass memory and processing limitations.
 
-**Resumo:** Este artigo implementa e avalia o algoritmo pós-quântico de encapsulamento de chaves ML-KEM na plataforma Java Card, especificamente visando SIMs e eSIMs como as plataformas finais.
-Para tal fim, são utilizadas técnicas de otimização como buffers globais e geração de vetores sob demanda para contornar limitações de memória e processamento nesses ambientes restritos.
-O consumo de memória alcançado permite implementar o ML-KEM em cartões com recursos restritos e menos de 7 kB de RAM, impulsionando ainda mais a adoção da criptografia pós-quântica em redes móveis.
+This work was carried out by Fernando A. Penido, supervised by Marco A. Henriques and assisted by Caio Teixeira and Rodrigo D. Meneses, in the undergraduate research program at Unicamp, with support from the Coordination for the Improvement of Higher Education Personnel (CAPES) and the National Council for Scientific and Technological Development (CNPq).
 
-# Estrutura do readme.md e organização do repositório
+**Abstract:** This article implements and evaluates the ML-KEM post-quantum key encapsulation algorithm on the Java Card platform, specifically targeting SIMs and eSIMs as the final platforms.
+To achieve this, optimization techniques such as global buffers and on-demand array generation are used to overcome memory and processing limitations in these constrained environments.
+The memory consumption achieved allows the implementation of ML-KEM on resource-constrained cards with less than 7 kB of RAM, further driving the adoption of post-quantum cryptography in mobile networks.
 
-Este repositório contém um arquivo README.md detalhando a estrutura do projeto, incluindo informações sobre a organização dos diretórios e arquivos, considerações de segurança, bem como instruções para instalação, execução de testes e experimentos.
-As seções estão separadas abaixo:
+# README.md structure and repository organization
 
-* [Implementação do ML-KEM em smart cards](#implementação-e-avaliação-do-algoritmo-pós-quântico-ml-kem-em-smart-cards)
-* [Estrutura do readme.md e organização do repositório](#estrutura-do-readmemd-e-organização-do-repositório)
-* [Selos Considerados](#selos-considerados)
-* [Informações básicas](#informações-básicas)
-* [Dependências](#dependências)
-* [Preocupações com segurança](#preocupações-com-segurança)
-* [Instalação](#instalação)
-* [Teste mínimo](#teste-mínimo)
-* [Experimentos](#experimentos)
-* [Reivindicação #1: Corretude do Algoritmo (Testes NIST)](#reivindicação-1-corretude-do-algoritmo-testes-nist)
-* [Reivindicação #2: Consumo de Memória](#reivindicação-2-consumo-de-memória)
-* [Reivindicação #3: Tempo de execução do Applet](#reivindicação-3-tempo-de-execução-do-applet)
+This repository contains a README.md file detailing the project's structure, including information about the organization of directories and files, security considerations, as well as instructions for installation, running tests, and experiments.
+The sections are outlined below:
+
+* [Implementation and evaluation of the post-quantum algorithm ML-KEM on smart cards](#implementation-and-evaluation-of-the-post-quantum-algorithm-ml-kem-on-smart-cards)
+* [README.md structure and repository organization](#readmemd-structure-and-repository-organization)
+* [Considered Badges](#considered-badges)
+* [Basic Information](#basic-information)
+* [Dependencies](#dependencies)
+* [Security Concerns](#security-concerns)
+* [Installation](#installation)
+* [Minimal Test](#minimal-test)
+* [Experiments](#experiments)
+* [Claim #1: Algorithm Correctness (NIST Tests)](#claim-1-algorithm-correctness-nist-tests)
+* [Claim #2: Memory Consumption](#claim-2-memory-consumption)
+* [Claim #3: Applet Execution Time](#claim-3-applet-execution-time)
 * [LICENSE](#license)
 
-O repositório está organizado da seguinte forma:
+The repository is organized as follows:
 ```text
 mlkem-on-simcard/
 ├── src/
 │   ├── main/java/br/unicamp/ic/mlkem/
-│   │   └── MLKEMApplet.java              # Lógica principal do algoritmo ML-KEM para Java Card
+│   │   └── MLKEMApplet.java              # Main logic of the ML-KEM algorithm for Java Card
 │   │
 │   └── test/
 │       ├── java/br/unicamp/ic/mlkem/
-│       │   ├── DecapsulationTest.java    # Validação do desencapsulamento contra vetores NIST
-│       │   ├── EncapsulationTest.java    # Validação do encapsulamento contra vetores NIST
-│       │   ├── KeyGenerationTest.java    # Validação da geração de chaves contra vetores NIST
-│       │   └── TimeTest_MLKEMApplet.java # Benchmark simulado de tempo de execução
-│       │   └───KyberJCE                  # Pacote do KyberJCE utilizado como base para a implementação do ML-KEM
+│       │   ├── DecapsulationTest.java    # Validation of decapsulation against NIST vectors
+│       │   ├── EncapsulationTest.java    # Validation of encapsulation against NIST vectors
+│       │   ├── KeyGenerationTest.java    # Validation of key generation against NIST vectors
+│       │   └── TimeTest_MLKEMApplet.java # Simulated execution time benchmark
+│       │   └───KyberJCE                  # KyberJCE package used as the basis for the ML-KEM implementation
 │       │       ├───interfaces
 │       │       │       KyberKey.java
 │       │       │       KyberPrivateKey.java
@@ -93,146 +94,147 @@ mlkem-on-simcard/
 │       │               ObjectIdentifier.java
 │       │
 │       └── resources/
-│           ├── internalProjectionDecaps.json  # Known Answer Tests (KATs) brutos do NIST
-│           ├── internalProjectionEncaps.json  # Known Answer Tests (KATs) brutos do NIST
-│           └── internalProjectionKeyGen.json  # Known Answer Tests (KATs) brutos do NIST
+│           ├── internalProjectionDecaps.json  # Raw NIST Known Answer Tests (KATs)
+│           ├── internalProjectionEncaps.json  # Raw NIST Known Answer Tests (KATs)
+│           └── internalProjectionKeyGen.json  # Raw NIST Known Answer Tests (KATs)
 │       
 │       
-├── pom.xml                               # Gerenciador de dependências (Maven, jCardSim, JUnit)
-└── README.md                             # Documentação de avaliação do artefato
+├── pom.xml                               # Dependency manager (Maven, jCardSim, JUnit)
+└── README.md                             # Artifact evaluation documentation
 ```
-Devido à sobrecarga que múltiplas classes e objetos introduzem, como descrito no artigo, a lógica inteira do ML-KEM está presente em uma só classe. 
-Para facilitar a visualização e compreensão do código, foram separadas cada lógica de execução por um separador de comentários, que descreve qual o tipo das operações seguintes.
-Dentres os tipos, estão esses:
+Due to the overhead that multiple classes and objects introduce, as described in the article, the entire ML-KEM logic is present in a single class.
+To facilitate the visualization and understanding of the code, each execution logic was separated by a comment separator, which describes the type of the following operations.
+Among the types, are these:
 
-- **Funções Padrão do Java Card (linhas 245-443)**: Funções padrão do Java Card, como instalação do Applet, seleção e processamento de comandos APDU.
-- **SHAKE e SHA3 (linhas 444-919)**: Funções de hash SHAKE e SHA3, utilizadas para gerar vetores pseudo-aleatórios a partir de sementes.
-- **Operações de NTT (linhas 920-1.038)**: Funções de Transformada Rápida de Número Inteiro (NTT), utilizadas para acelerar operações polinomiais.
-- **Operações Polinomiais (linhas 1.039-1.519)**: Funções para manipulação de polinômios, incluindo adição, subtração, multiplicação e redução.
-- **Operações de Byte (linhas 1.520-1.605)**: Funções para manipulação de bytes, incluindo conversão de byte para int e vice-versa.
-- **Indistiguibilidade sob Ataque de Texto Claro Escolhido (IND-CPA) (linhas 1.606-2.203)**: Funções para geração de chaves, encapsulamento e desencapsulamento de chaves, garantindo segurança contra ataques de texto escolhido.
-# Selos Considerados
+- **Standard Java Card Functions (lines 245-443)**: Standard Java Card functions, such as Applet installation, selection, and APDU command processing.
+- **SHAKE and SHA3 (lines 444-919)**: SHAKE and SHA3 hash functions, used to generate pseudo-random arrays from seeds.
+- **NTT Operations (lines 920-1,038)**: Number Theoretic Transform (NTT) functions, used to accelerate polynomial operations.
+- **Polynomial Operations (lines 1,039-1,519)**: Functions for polynomial manipulation, including addition, subtraction, multiplication, and reduction.
+- **Byte Operations (lines 1,520-1,605)**: Functions for byte manipulation, including byte-to-int conversion and vice versa.
+- **Indistinguishability under Chosen Plaintext Attack (IND-CPA) (lines 1,606-2,203)**: Functions for key generation, key encapsulation, and decapsulation, ensuring security against chosen plaintext attacks.
 
-Os selos considerados para avaliação são: Artefatos Disponíveis (SeloD), Artefatos Funcionais (SeloF), Artefatos Sustentáveis (SeloS) e Experimentos Reprodutíveis (SeloR).
+# Considered Badges
 
-# Informações básicas
+The badges considered for evaluation are: Available Artifacts (SeloD), Functional Artifacts (SeloF), Sustainable/Reusable Artifacts (SeloS), and Reproducible Experiments (SeloR).
 
-Para a execução do artefato, é necessário apenas um ambiente desktop e a instalação das dependências descritas na seção abaixo. 
+# Basic Information
 
-O artefato foi desenvolvido e testado em um ambiente Linux, mas também pode ser executado em sistemas Windows e MacOS, desde que as dependências sejam corretamente instaladas.
+To execute the artifact, only a desktop environment and the installation of the dependencies described in the section below are required.
 
-Não é necessário nenhum hardware específico, como smart cards, para a execução do artefato, pois o Applet é executado em um simulador de Java Card (jCardSim) que simula o comportamento de um smart card em um ambiente desktop.
+The artifact was developed and tested in a Linux environment, but it can also be run on Windows and MacOS systems, provided the dependencies are correctly installed.
 
-Como recomendação, temos as seguintes especificações mínimas para o ambiente de execução:
+No specific hardware, such as smart cards, is required to execute the artifact, because the Applet is executed in a Java Card simulator (jCardSim) that simulates the behavior of a smart card in a desktop environment.
 
-**Requisitos de Hardware:**
-- Processador: Arquitetura x86_64 ou ARM moderna
-- Memória RAM: 2 GB
-- Espaço em disco: 500 MB
+As a recommendation, we have the following minimum specifications for the execution environment:
 
-**Requisitos de Software:**
-- Sistema Operacional: Linux, Windows ou MacOS
-- Java Development Kit (JDK): Versão 17
-- Apache Maven: Versão 3.11.0
-- Acesso à internet para baixar dependências do Maven
+**Hardware Requirements:**
+- Processor: Modern x86_64 or ARM architecture
+- RAM Memory: 2 GB
+- Disk Space: 500 MB
 
-# Dependências
+**Software Requirements:**
+- Operating System: Linux, Windows, or MacOS
+- Java Development Kit (JDK): Version 17
+- Apache Maven: Version 3.11.0
+- Internet access to download Maven dependencies
 
-Para a execução do artefato, são necessárias as seguintes dependências:
+# Dependencies
 
-| Dependência            | Versão      | Necessidade no Projeto                                                                                                | Instalação |
+To execute the artifact, the following dependencies are required:
+
+| Dependency             | Version     | Need in the Project                                                                                                   | Installation |
 |:-----------------------|:------------|:----------------------------------------------------------------------------------------------------------------------| :--- |
-| **JDK**                | 17          | Ambiente de execução e compilação base do Java necessário para rodar o projeto.                                       | Manual |
-| **Apache Maven**       | 3.11.0      | Gerenciador de dependências e automação de build, responsável por compilar e rodar os testes.                         | Manual |
-| **jCardSim**\*         | 3.0.6.0     | Simulador da API Java Card que permite executar e testar o Applet no desktop sem um smart card físico.                | Automática |
-| **org.json**\*         | 20231013    | Necessária para ler, fazer o parse e processar os arquivos JSON contendo os vetores de teste (KATs) do NIST.          | Automática |
-| **JUnit 5**\*          | 5.10.0      | Framework de testes utilizado para estruturar, automatizar e validar os testes de encapsulamento e desencapsulamento. | Automática |
-| **JMH**\*              | 1.37        | Framework utilizado para realizar o Benchamrk do MLKEMApplet e KyberJCE                                               | Automática |
-| **keccakj**\*          | 1.1.0       | Utilizado para executar as funções SHAKE na implementação KyberJCE                                                    | Automática |
+| **JDK**                | 17          | Base Java execution and compilation environment required to run the project.                                          | Manual |
+| **Apache Maven**       | 3.11.0      | Dependency manager and build automation, responsible for compiling and running the tests.                             | Manual |
+| **jCardSim**\*         | 3.0.6.0     | Java Card API simulator that allows running and testing the Applet on the desktop without a physical smart card.        | Automatic |
+| **org.json**\*         | 20231013    | Required to read, parse, and process the JSON files containing the NIST test vectors (KATs).                          | Automatic |
+| **JUnit 5**\*          | 5.10.0      | Testing framework used to structure, automate, and validate the encapsulation and decapsulation tests.                | Automatic |
+| **JMH**\*              | 1.37        | Framework used to benchmark the MLKEMApplet and KyberJCE                                                              | Automatic |
+| **keccakj**\*          | 1.1.0       | Used to execute the SHAKE functions in the KyberJCE implementation                                                    | Automatic |
 
-\* Estas dependências não exigem instalação manual prévia. Elas são baixadas e configuradas automaticamente pelo Maven no momento da execução do comando de testes.
+\* These dependencies do not require prior manual installation. They are automatically downloaded and configured by Maven when the test command is executed.
 
-# Preocupações com segurança
+# Security Concerns
 
-Esse código não apresenta nenhum risco para os avaliadores, porém, é importante ressaltar que o código foi alterado para facilitar o processo de testes.
-Em específico, a implementação de teste utilizada é a br.unicamp.regras.applet.MLKEMApplet, que é uma versão do MLKEMApplet com métodos de teste expostos para permitir a validação dos resultados obtidos com os vetores de teste do NIST.
+This code poses no risk to the reviewers, however, it is important to note that the code has been altered to facilitate the testing process.
+Specifically, the test implementation used is br.unicamp.regras.applet.MLKEMApplet, which is a version of the MLKEMApplet with exposed test methods to allow the validation of the results obtained with the NIST test vectors.
 
-Em consequência, foi criado um applet com os acessos de privacidade corretos dentro do pacote br.unicamp.regras.sec_app para permitir a execução do applet em casos práticos.
+Consequently, an applet with the correct privacy access was created within the br.unicamp.regras.sec_app package to allow the applet's execution in practical cases.
 
-A lista de funções/buffers expostos para fins de teste dentro do br.unicamp.regras.applet.MLKEMApplet é a seguinte:
-- `packedDK` (byte[]) - buffer que armazena a chave de desencapsulamento.
-- `secretKey` (byte[]) - buffer que armazena a chave secreta.
-- `bufC` (byte[]) - buffer que armazena o encapsulamento.
-- `generateKeys512Internal()` - função interna da geração de chaves do ML-KEM-512.
-- `generateKeys768Internal()` - função que gera o par de chaves do ML-KEM-768.
-- `generateKeys1024Internal()` - função que gera o par de chaves do ML-KEM-1024.
-- `generateKeys512()` - função que gera o par de chaves do ML-KEM-512.
-- `generateKeys768()` - função que gera o par de chaves do ML-KEM-768.
-- `generateKeys1024()` - função que gera o par de chaves do ML-KEM-1024.
-- `encaps512Internal()` - função interna do encapsulamento da chave secreta para o ML-KEM-512.
-- `encaps768Internal()` - função interna do encapsulamento da chave secreta para o ML-KEM-768.
-- `encaps1024Internal()` - função interna do encapsulamento da chave secreta para o ML-KEM-1024.
-- `encaps512()` - função que encapsula a chave secreta do ML-KEM-512.
-- `encaps768()` - função que encapsula a chave secreta do ML-KEM-768.
-- `encaps1024()` - função que encapsula a chave secreta do ML-KEM-1024.
-- `decaps512Internal()` - função interna de desencapsulamento da chave secreta do ML-KEM-512.
-- `decaps768Internal()` - função que desencapsula a chave secreta do ML-KEM-768.
-- `decaps1024Internal()` - função que desencapsula a chave secreta do ML-KEM-1024.
-- `decaps512()` - função que desencapsula a chave secreta do ML-KEM-512.
-- `decaps768()` - função que desencapsula a chave secreta do ML-KEM-768.
-- `decaps1024()` - função que desencapsula a chave secreta do ML-KEM-1024.
+The list of exposed functions/buffers for testing purposes within br.unicamp.regras.applet.MLKEMApplet is as follows:
+- `packedDK` (byte[]) - buffer that stores the decapsulation key.
+- `secretKey` (byte[]) - buffer that stores the secret key.
+- `bufC` (byte[]) - buffer that stores the encapsulation.
+- `generateKeys512Internal()` - internal key generation function for ML-KEM-512.
+- `generateKeys768Internal()` - function that generates the key pair for ML-KEM-768.
+- `generateKeys1024Internal()` - function that generates the key pair for ML-KEM-1024.
+- `generateKeys512()` - function that generates the key pair for ML-KEM-512.
+- `generateKeys768()` - function that generates the key pair for ML-KEM-768.
+- `generateKeys1024()` - function that generates the key pair for ML-KEM-1024.
+- `encaps512Internal()` - internal function for encapsulating the secret key for ML-KEM-512.
+- `encaps768Internal()` - internal function for encapsulating the secret key for ML-KEM-768.
+- `encaps1024Internal()` - internal function for encapsulating the secret key for ML-KEM-1024.
+- `encaps512()` - function that encapsulates the ML-KEM-512 secret key.
+- `encaps768()` - function that encapsulates the ML-KEM-768 secret key.
+- `encaps1024()` - function that encapsulates the ML-KEM-1024 secret key.
+- `decaps512Internal()` - internal function for decapsulating the ML-KEM-512 secret key.
+- `decaps768Internal()` - function that decapsulates the ML-KEM-768 secret key.
+- `decaps1024Internal()` - function that decapsulates the ML-KEM-1024 secret key.
+- `decaps512()` - function that decapsulates the ML-KEM-512 secret key.
+- `decaps768()` - function that decapsulates the ML-KEM-768 secret key.
+- `decaps1024()` - function that decapsulates the ML-KEM-1024 secret key.
 
-# Instalação
+# Installation
 
-Para a instalação do artefato, é necessário instalar as dependências requeridas. 
-Em seguida, clonar o repositório e acessar o diretório do projeto. 
+To install the artifact, you need to install the required dependencies.
+Next, clone the repository and access the project directory.
 
 ```bash
-# Atualizar a lista de pacotes
+# Update the package list
 sudo apt-get update
 
-# Instalar o JDK 17, Maven e Git
+# Install JDK 17, Maven and Git
 sudo apt-get install -y git maven openjdk-17-jdk
 
-# Clonar o repositório do artefato
-git clone https://github.com/regras/mlkem-on-simcard.git
+# Clone the artifact repository
+git clone [https://github.com/regras/mlkem-on-simcard.git](https://github.com/regras/mlkem-on-simcard.git)
 
-# Acessar o diretório do projeto
+# Access the project directory
 cd mlkem-on-simcard
 ```
+# Minimal Test
 
-# Teste mínimo
+The minimal test consists of running the Applet's correctness tests, which validate the ML-KEM key generation, encapsulation, and decapsulation against the NIST Known Answer Tests (KATs).
 
-O teste mínimo consiste em executar os testes de corretude do Applet, que validam a geração de chaves, encapsulamento e desencapsulamento do ML-KEM contra os vetores de teste (KATs) do NIST.
-
-Para sua execução, basta executar o comando abaixo, após a instalação das dependências e clonagem do repositório.
+To execute it, simply run the command below, after installing the dependencies and cloning the repository.
 
 ```bash
-mvn clean test -q | tee log_testes_funcionais.txt
+mvn clean compile
 ```
+# Experiments
 
-# Experimentos
+This section describes a step-by-step guide for executing and obtaining the results from the article.
+Reviewers should be able to achieve the presented claims.
 
-Esta seção descreve um passo a passo para a execução e obtenção dos resultados do artigo. 
-Os revisores devem conseguir alcançar as reivindicações apresentadas.
+## Claim #1: Algorithm Correctness (NIST Tests)
 
-## Reivindicação #1: Corretude do Algoritmo (Testes NIST)
+This claim is validated by the Applet's correctness tests, which compare the obtained results with the NIST test vectors (KATs).
+The execution of the correctness tests is performed by the command `mvn clean test -q | tee log_testes_funcionais.txt`, which runs the ML-KEM key generation, encapsulation, and decapsulation tests.
+A success message is expected to appear at the end of the execution, indicating that all tests have passed.
 
-Essa reivindicação é validada pelos testes de corretude do Applet, que comparam os resultados obtidos com os vetores de teste (KATs) do NIST.
-A execução dos testes de corretude é realizada pelo comando `mvn clean test -q | tee log_testes_funcionais.txt`, que executa os testes de geração de chaves, encapsulamento e desencapsulamento do ML-KEM.
-É esperado que apareça uma mensagem de sucesso ao final da execução, indicando que todos os testes foram aprovados.
+If an error occurs, should be checked the if the dependencies have the correct version and if there was any alterations to the original file.   
 
-Os resultados do testes são salvos no arquivo `log_testes_funcionais.txt`, que contém a saída completa do teste, incluindo mensagens de sucesso ou falha para cada teste.
+The test results are saved in the `log_testes_funcionais.txt` file, which contains the complete test output, including success or failure messages for each test.
 
-## Reivindicação #2: Consumo de Memória
+## Claim #2: Memory Consumption
 
-O consumo de memória do Applet é simplesmente a soma de todas as alocações do construtor `MLKEMApplet()`, que é executado apenas uma vez durante a chamada do método `install()` (método da instalação do Applet no smart card).
+The memory consumption of the Applet is an static code evaluation of all the memory allocations.
+Due to the allocations being solely executed in the ``install`` method, which calls the ``MLKEMApplet()`` constructor, this analysis is a simples sum of all allocations.
 
-
-A função `MLKEMApplet()` do Applet está disponível abaixo:
+So, the memory consumption of the applet's `MLKEMApplet()` function is available below:
 ```java
     public MLKEMApplet(short level) {
-    // SHAKE allocation buffers: Ao todo, são alocados 407 (bytes)
+    // SHAKE allocation buffers: In total, 407 (bytes) are allocated
     state = JCSystem.makeTransientByteArray((short) 200, JCSystem.CLEAR_ON_DESELECT);
     B = JCSystem.makeTransientByteArray((short) 40, JCSystem.CLEAR_ON_DESELECT);
     C = JCSystem.makeTransientByteArray((short) 40, JCSystem.CLEAR_ON_DESELECT);
@@ -250,7 +252,7 @@ A função `MLKEMApplet()` do Applet está disponível abaixo:
     bufPolyTemp = transientShortArray(paramsN); // 256 shorts (512 bytes)
     hashBuffer = transientByteArray(672); // 672 bytes
     seedBuf = transientByteArray(64); // 64 bytes
-    sr = RandomData.getInstance(RandomData.ALG_KEYGENERATION); // gasta virtualmente zero bytes (recurso pré-alocado pela JCRE)
+    sr = RandomData.getInstance(RandomData.ALG_KEYGENERATION); // consumes virtually zero bytes (resource pre-allocated by the JCRE)
     secretKey = transientByteArray(MLKEMSSBytes);  // 32 bytes
     message = transientByteArray(32); // 32 bytes
 
@@ -274,176 +276,174 @@ A função `MLKEMApplet()` do Applet está disponível abaixo:
     }
 }
 ```
+From this function, it is possible to observe that the memory consumption of the Applet is equivalent to Table 2, presented in the article, which is the sum of all allocations of the `MLKEMApplet()` constructor.
 
-Por essa função, é possível observar que o consumo de memória do Applet é equivalente a Tabela 2, apresentada no artigo, que é a soma de todas as alocações do construtor `MLKEMApplet()`.
-
-Essa tabela está reproduzida abaixo, com o consumo de memória detalhado para cada nível de segurança do ML-KEM.
-
+This table is reproduced below, with the detailed memory consumption for each ML-KEM security level.
 
 <table>
   <thead>
     <tr>
-      <th>Nível</th>
-      <th>Operação</th>
+      <th>Level</th>
+      <th>Operation</th>
       <th>RAM (B)</th>
       <th>Flash (B)</th>
       <th>Total (B)</th>
     </tr>
   </thead>
   <tbody>
-    <!-- Bloco ML-KEM-512 -->
+    <!-- ML-KEM-512 Block -->
     <tr>
       <td rowspan="3"><strong>ML-KEM-512</strong></td>
-      <td>Geração de Chaves</td>
-      <td>2.679</td>
-      <td>1.623</td>
-      <td>4.302</td>
+      <td>Key Generation</td>
+      <td>2,679</td>
+      <td>1,623</td>
+      <td>4,302</td>
     </tr>
     <tr>
-      <td>Encapsulamento</td>
-      <td>3.447</td>
-      <td>1.655</td>
-      <td>5.102</td>
+      <td>Encapsulation</td>
+      <td>3,447</td>
+      <td>1,655</td>
+      <td>5,102</td>
     </tr>
     <tr>
-      <td>Desencapsulamento</td>
-      <td>4.215</td>
-      <td>1.655</td>
-      <td>5.870</td>
+      <td>Decapsulation</td>
+      <td>4,215</td>
+      <td>1,655</td>
+      <td>5,870</td>
     </tr>
-    <!-- Bloco ML-KEM-768 -->
+    <!-- ML-KEM-768 Block -->
     <tr>
       <td rowspan="3"><strong>ML-KEM-768</strong></td>
-      <td>Geração de Chaves</td>
-      <td>2.679</td>
-      <td>2.400</td>
-      <td>5.079</td>
+      <td>Key Generation</td>
+      <td>2,679</td>
+      <td>2,400</td>
+      <td>5,079</td>
     </tr>
     <tr>
-      <td>Encapsulamento</td>
-      <td>3.767</td>
-      <td>2.432</td>
-      <td>6.199</td>
+      <td>Encapsulation</td>
+      <td>3,767</td>
+      <td>2,432</td>
+      <td>6,199</td>
     </tr>
     <tr>
-      <td>Desencapsulamento</td>
-      <td>4.855</td>
-      <td>2.432</td>
-      <td>7.287</td>
+      <td>Decapsulation</td>
+      <td>4,855</td>
+      <td>2,432</td>
+      <td>7,287</td>
     </tr>
-    <!-- Bloco ML-KEM-1024 -->
+    <!-- ML-KEM-1024 Block -->
     <tr>
       <td rowspan="3"><strong>ML-KEM-1024</strong></td>
-      <td>Geração de Chaves</td>
-      <td>2.679</td>
-      <td>3.168</td>
-      <td>5.847</td>
+      <td>Key Generation</td>
+      <td>2,679</td>
+      <td>3,168</td>
+      <td>5,847</td>
     </tr>
     <tr>
-      <td>Encapsulamento</td>
-      <td>4.247</td>
-      <td>3.200</td>
-      <td>7.447</td>
+      <td>Encapsulation</td>
+      <td>4,247</td>
+      <td>3,200</td>
+      <td>7,447</td>
     </tr>
     <tr>
-      <td>Desencapsulamento</td>
-      <td>5.815</td>
-      <td>3.200</td>
-      <td>9.015</td>
+      <td>Decapsulation</td>
+      <td>5,815</td>
+      <td>3,200</td>
+      <td>9,015</td>
     </tr>
   </tbody>
 </table>
 
-## Reivindicação #3: Tempo de execução do Applet
+## Claim #3: Applet Execution Time
 
-Para realizar o benchmark do tempo de execução, é necessário executar o comando abaixo, que irá compilar o projeto e executar o benchmark utilizando o framework JMH.
-Será exibido o tempo de execução em microssegundos para a geração de chaves, encapsulamento e desencapsulamento do MLKEMApplet e do KyberJCE, permitindo a comparação entre as duas implementações.
+To perform the execution time benchmark, it is necessary to run the command below, which will compile the project and execute the benchmark using the JMH framework.
+The execution time in microseconds for key generation, encapsulation, and decapsulation for the MLKEMApplet and KyberJCE will be displayed, allowing a comparison between the two implementations.
 
 ```bash
-# Executar os benchmarks de tempo de execução
+# Run the execution time benchmarks
 mvn test-compile exec:exec -Dexec.executable="java" -Dexec.classpathScope="test" -Dexec.args="-cp %classpath org.openjdk.jmh.Main -rf csv -rff resultados_benchmark.csv"
 ```
 
-O resultado estará disponível no arquivo `resultados_benchmark.csv`, que contém os tempos de execução em microssegundos para cada operação do MLKEMApplet e do KyberJCE.
+The result will be available in the `resultados_benchmark.csv` file, which contains the execution times in microseconds for each operation of the MLKEMApplet and KyberJCE.
 
-O framework JMH não garante execução com resultados idênticos para cada execução, portanto, é esperado que os resultados variem entre execuções.
-Além disso, diferentes ambientes de execução podem apresentar tempos diferentes, assim é importante analisar as proporções entre a execução do MLKEMApplet e do KyberJCE, que devem ser consistentes com os resultados apresentados no artigo.
+The JMH framework does not guarantee identical results for each run, so it is expected that the results will vary between executions.
+Furthermore, different execution environments may present different times, so it is important to analyze the ratios between the execution of the MLKEMApplet and KyberJCE, which should be consistent with the results presented in the article.
 
-O resultado do trabalho está descrito na Tabela 4 do artigo, reproduzida abaixo:
+The result of this work is described in Table 4 of the article, reproduced below:
 <table>
   <thead>
     <tr>
-      <th>Nível</th>
-      <th>Operação</th>
+      <th>Level</th>
+      <th>Operation</th>
       <th>KyberJCE (ms/op)</th>
-      <th>Este Trabalho (ms/op)</th>
-      <th>Razão</th>
+      <th>This Work (ms/op)</th>
+      <th>Ratio</th>
     </tr>
   </thead>
   <tbody>
-    <!-- Bloco ML-KEM-512 -->
+    <!-- ML-KEM-512 Block -->
     <tr>
       <td rowspan="3"><strong>ML-KEM-512</strong></td>
-      <td>Geração de Chaves</td>
-      <td>0,17 ± 0,01</td>
-      <td>1,41 ± 0,15</td>
-      <td>8,67</td>
+      <td>Key Generation</td>
+      <td>0.17 ± 0.01</td>
+      <td>1.41 ± 0.15</td>
+      <td>8.67</td>
     </tr>
     <tr>
-      <td>Encapsulamento</td>
-      <td>0,07 ± 0,01</td>
-      <td>1,53 ± 0,31</td>
-      <td>21,33</td>
+      <td>Encapsulation</td>
+      <td>0.07 ± 0.01</td>
+      <td>1.53 ± 0.31</td>
+      <td>21.33</td>
     </tr>
     <tr>
-      <td>Desencapsulamento</td>
-      <td>0,08 ± 0,01</td>
-      <td>1,85 ± 0,20</td>
-      <td>24,08</td>
+      <td>Decapsulation</td>
+      <td>0.08 ± 0.01</td>
+      <td>1.85 ± 0.20</td>
+      <td>24.08</td>
     </tr>
-    <!-- Bloco ML-KEM-768 -->
+    <!-- ML-KEM-768 Block -->
     <tr>
       <td rowspan="3"><strong>ML-KEM-768</strong></td>
-      <td>Geração de Chaves</td>
-      <td>0,20 ± 0,01</td>
-      <td>2,26 ± 0,05</td>
-      <td>11,48</td>
+      <td>Key Generation</td>
+      <td>0.20 ± 0.01</td>
+      <td>2.26 ± 0.05</td>
+      <td>11.48</td>
     </tr>
     <tr>
-      <td>Encapsulamento</td>
-      <td>0,10 ± 0,01</td>
-      <td>2,37 ± 0,49</td>
-      <td>23,00</td>
+      <td>Encapsulation</td>
+      <td>0.10 ± 0.01</td>
+      <td>2.37 ± 0.49</td>
+      <td>23.00</td>
     </tr>
     <tr>
-      <td>Desencapsulamento</td>
-      <td>0,12 ± 0,03</td>
-      <td>2,76 ± 0,11</td>
-      <td>23,59</td>
+      <td>Decapsulation</td>
+      <td>0.12 ± 0.03</td>
+      <td>2.76 ± 0.11</td>
+      <td>23.59</td>
     </tr>
-    <!-- Bloco ML-KEM-1024 -->
+    <!-- ML-KEM-1024 Block -->
     <tr>
       <td rowspan="3"><strong>ML-KEM-1024</strong></td>
-      <td>Geração de Chaves</td>
-      <td>0,25 ± 0,03</td>
-      <td>3,60 ± 0,30</td>
-      <td>14,48</td>
+      <td>Key Generation</td>
+      <td>0.25 ± 0.03</td>
+      <td>3.60 ± 0.30</td>
+      <td>14.48</td>
     </tr>
     <tr>
-      <td>Encapsulamento</td>
-      <td>0,17 ± 0,08</td>
-      <td>3,89 ± 0,16</td>
-      <td>22,45</td>
+      <td>Encapsulation</td>
+      <td>0.17 ± 0.08</td>
+      <td>3.89 ± 0.16</td>
+      <td>22.45</td>
     </tr>
     <tr>
-      <td>Desencapsulamento</td>
-      <td>0,16 ± 0,02</td>
-      <td>4,66 ± 0,42</td>
-      <td>28,94</td>
+      <td>Decapsulation</td>
+      <td>0.16 ± 0.02</td>
+      <td>4.66 ± 0.42</td>
+      <td>28.94</td>
     </tr>
   </tbody>
 </table>
 
 # LICENSE
 
-Este projeto está licenciado sob a Licença MIT. Detalhes completos podem ser encontrados no arquivo `LICENSE` na raiz deste repositório, que também inclui os avisos de direitos autorais e atribuições aos projetos ThothTrust e KyberJCE utilizados como base para esta implementação.
+This project is licensed under the MIT License. Full details can be found in the `LICENSE` file at the root of this repository, which also includes the copyright notices and attributions to the ThothTrust and KyberJCE projects used as a basis for this implementation.

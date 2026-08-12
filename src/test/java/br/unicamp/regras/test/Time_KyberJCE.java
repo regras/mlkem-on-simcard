@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  * @author Fernando Penido
  */
 @BenchmarkMode(Mode.AverageTime) // average time is being measure
-@OutputTimeUnit(TimeUnit.MICROSECONDS) // with microseconds as unit
+@OutputTimeUnit(TimeUnit.MILLISECONDS) // with milliseconds as unit
 @State(Scope.Thread) // the state is isolated by thread
 @Warmup(iterations = 3, time = 1, timeUnit = TimeUnit.SECONDS) // warmup iterations
 @Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS) // number of measurements
