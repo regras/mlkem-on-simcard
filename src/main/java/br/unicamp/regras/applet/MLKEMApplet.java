@@ -12,6 +12,7 @@ import javacard.security.RandomData;
  * @author Fernando Penido
  */
 public class MLKEMApplet extends Applet {
+    // Parameters for the ML-KEM algorithm
     public final static int paramsN = 256;  //polynomial size
     public final static int paramsQ = 3329; //modulus Q
     public final static int paramsQinv = 62209; //inverse of the modulus Q
@@ -124,6 +125,7 @@ public class MLKEMApplet extends Applet {
     public static final byte[] rc23 = {(byte) 0x80, (byte) 0x00, (byte) 0x00,
             (byte) 0x00, (byte) 0x80, (byte) 0x00, (byte) 0x80, (byte) 0x08};
 
+    // Buffers for the SHAKE and SHA3 algorithms
     public static byte[] state;
     public static byte[] B;
     public static byte[] C;
@@ -135,8 +137,8 @@ public class MLKEMApplet extends Applet {
     public static short[] sb;
     public static boolean[] bb;
 
-    private static short pos;           // Posição atual no bloco
-    private static boolean isSqueezing; // Trava de segurança entre Absorb e Squeeze
+    private static short pos;           // Block position
+    private static boolean isSqueezing; // Flag to indicate if the algorithm is in the squeezing phase
 
     /**
      * Creates a transient short array that is cleared on system reset
@@ -200,7 +202,7 @@ public class MLKEMApplet extends Applet {
     public static byte klevel;
 
     public MLKEMApplet(short level) {
-        // SHAKE allocation buffers: Ao todo, são alocados 407 (bytes)
+        // SHAKE allocation buffers: In total, 407 (bytes) are allocated
         state = JCSystem.makeTransientByteArray((short) 200, JCSystem.CLEAR_ON_DESELECT);
         B = JCSystem.makeTransientByteArray((short) 40, JCSystem.CLEAR_ON_DESELECT);
         C = JCSystem.makeTransientByteArray((short) 40, JCSystem.CLEAR_ON_DESELECT);
@@ -218,7 +220,7 @@ public class MLKEMApplet extends Applet {
         bufPolyTemp = transientShortArray(paramsN); // 256 shorts (512 bytes)
         hashBuffer = transientByteArray(672); // 672 bytes
         seedBuf = transientByteArray(64); // 64 bytes
-        sr = RandomData.getInstance(RandomData.ALG_KEYGENERATION); // gasta virtualmente zero bytes (recurso pré-alocado pela JCRE)
+        sr = RandomData.getInstance(RandomData.ALG_KEYGENERATION); // consumes virtually zero bytes (resource pre-allocated by the JCRE)
         secretKey = transientByteArray(MLKEMSSBytes);  // 32 bytes
         message = transientByteArray(32); // 32 bytes
 
@@ -303,11 +305,12 @@ public class MLKEMApplet extends Applet {
 
         byte[] buffer = apdu.getBuffer();
 
-        // Verifica a Classe (CLA) do comando (Usaremos 0x80 como padrão)
+        // Verify the class called
         if (buffer[ISO7816.OFFSET_CLA] != (byte) 0x80) {
             ISOException.throwIt(ISO7816.SW_CLA_NOT_SUPPORTED);
         }
 
+        // Verify the instruction called
         switch (buffer[ISO7816.OFFSET_INS]) {
             case INS_GENERATE_KEYS:
                 switch (klevel) {
@@ -329,10 +332,8 @@ public class MLKEMApplet extends Applet {
             case INS_ENCAPSULATE:
                 encapsulation1024();
 
-                // Copia do cofre (packedDK) para o buffer de saída do APDU
                 Util.arrayCopyNonAtomic(secretKey, (short) 0, buffer, (short) 0, MLKEMSSBytes);
 
-                // 3. Envia os dados para o computador (Terminal)
                 apdu.setOutgoingAndSend((short) 0, MLKEMSSBytes);
                 break;
 
@@ -342,7 +343,6 @@ public class MLKEMApplet extends Applet {
 
                 Util.arrayCopyNonAtomic(secretKey, (short) 0, buffer, (short) 0, MLKEMSSBytes);
 
-                // 3. Envia os dados para o computador (Terminal)
                 apdu.setOutgoingAndSend((short) 0, MLKEMSSBytes);
                 break;
 
@@ -391,7 +391,6 @@ public class MLKEMApplet extends Applet {
 
 
             default:
-                // Se o PC enviar um comando que não existe (ex: 0x04)
                 ISOException.throwIt(ISO7816.SW_INS_NOT_SUPPORTED);
         }
     }
@@ -426,7 +425,6 @@ public class MLKEMApplet extends Applet {
         // If there is data missing, send the current block and throw a controlled exception 61XX
         // When the PC receives 61XX, it will send a GET RESPONSE command to get the next block of data
         if (bytesMissing > 0) {
-            // Envia os dados atuais e lança uma exceção controlada 61XX
             apdu.setOutgoingAndSend((short) 0, blockSize);
             ISOException.throwIt((short) (0x6100)); // 61 00 avisa que há mais dados
         } else {
