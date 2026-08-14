@@ -239,7 +239,7 @@ The test results are saved in the `log_testes_funcionais.txt` file, which contai
 ## Claim #2: Memory Consumption
 
 The memory consumption of the applet is a static code evaluation of all the memory allocations.
-Due to the allocations being solely executed in the ``install`` method, which calls the ``MLKEMApplet()`` constructor, this analysis is a simple sum of all allocations.
+Due to the allocations being solely executed in the ``install`` method, which calls the ``MLKEMApplet()`` constructor, this analysis is a simple sum of all allocations performed.
 
 So, the memory consumption of the applet's `MLKEMApplet()` function is available below:
 
