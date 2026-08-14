@@ -113,6 +113,9 @@ Among the types, are these:
 - **Byte Operations (lines 1,520-1,605)**: Functions for byte manipulation, including byte-to-int conversion and vice versa.
 - **Indistinguishability under Chosen Plaintext Attack (IND-CPA) (lines 1,606-2,203)**: Functions for key generation, key encapsulation, and decapsulation, ensuring security against chosen plaintext attacks.
 
+The test execution can be seen in the video:
+[[Test Execution Video]](https://youtu.be/pJ3oR3Wf7vg)
+
 # Considered Badges
 
 The badges considered for evaluation are: Available Artifacts (SeloD), Functional Artifacts (SeloF), Sustainable/Reusable Artifacts (SeloS), and Reproducible Experiments (SeloR).
@@ -197,7 +200,7 @@ sudo apt-get update
 sudo apt-get install -y git maven openjdk-17-jdk
 
 # Clone the artifact repository
-git clone [https://github.com/regras/mlkem-on-simcard.git](https://github.com/regras/mlkem-on-simcard.git)
+git clone https://github.com/regras/mlkem-on-simcard
 
 # Access the project directory
 cd mlkem-on-simcard
@@ -211,6 +214,9 @@ To execute it, simply run the command below, after installing the dependencies a
 ```bash
 mvn clean compile
 ```
+
+In case the dependencies are not correctly installed, the command will fail, and an error message will be displayed, indicating the missing dependencies.
+
 # Experiments
 
 This section describes a step-by-step guide for executing and obtaining the results from the article.
@@ -219,10 +225,14 @@ Reviewers should be able to achieve the presented claims.
 ## Claim #1: Algorithm Correctness (NIST Tests)
 
 This claim is validated by the applet's correctness tests, which compare the obtained results with the NIST test vectors (KATs).
-The execution of the correctness tests is performed by the command `mvn clean test -q | tee log_testes_funcionais.txt`, which runs the ML-KEM key generation, encapsulation, and decapsulation tests.
+The execution of the correctness tests is performed by the command below:
+```bash
+mvn clean test -q | tee log_testes_funcionais.txt
+```
+This command runs the ML-KEM key generation, encapsulation, and decapsulation tests.
 A success message is expected to appear at the end of the execution, indicating that all tests have passed.
 
-If an error occurs, should be checked the if the dependencies have the correct version and if there was any alterations to the original file.   
+If an error occurs, the user should check if the dependencies have the correct version and if there was any alterations to the original file.   
 
 The test results are saved in the `log_testes_funcionais.txt` file, which contains the complete test output, including success or failure messages for each test.
 
