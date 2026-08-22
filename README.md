@@ -103,17 +103,9 @@ mlkem-on-simcard/
 └── README.md                             # Artifact evaluation documentation
 ```
 Due to the overhead that multiple classes and objects introduce, as described in the article, the entire ML-KEM logic is present in a single class.
-To facilitate the visualization and understanding of the code, each execution logic was separated by a comment separator, which describes the type of the following operations.
-Among the types, are these:
+It is possible to check the organization of the applet in the [MLKEMApplet Organization](docs/MLKEMApplet_Organization.md).
 
-- **Standard Java Card Functions (lines 245-443)**: Standard Java Card functions, such as applet installation, selection, and APDU command processing.
-- **SHAKE and SHA3 (lines 444-919)**: SHAKE and SHA3 hash functions, used to generate pseudo-random arrays from seeds.
-- **NTT Operations (lines 920-1,038)**: Number Theoretic Transform (NTT) functions, used to accelerate polynomial operations.
-- **Polynomial Operations (lines 1,039-1,519)**: Functions for polynomial manipulation, including addition, subtraction, multiplication, and reduction.
-- **Byte Operations (lines 1,520-1,605)**: Functions for byte manipulation, including byte-to-int conversion and vice versa.
-- **Indistinguishability under Chosen Plaintext Attack (IND-CPA) (lines 1,606-2,203)**: Functions for key generation, key encapsulation, and decapsulation, ensuring security against chosen plaintext attacks.
-
-The test execution can be seen in the video:
+In case of a need for checking the tests, there is a test execution video in the following link:
 [[Test Execution Video]](https://youtu.be/pJ3oR3Wf7vg)
 
 # Considered Badges
@@ -162,30 +154,9 @@ To execute the artifact, the following dependencies are required:
 This code poses no risk to the reviewers, however, it is important to note that the code has been altered to facilitate the testing process.
 Specifically, the test class used is br.unicamp.regras.applet.MLKEMApplet, which is a version of the MLKEMApplet with exposed test methods to allow the validation of the results obtained with the NIST test vectors.
 
-Consequently, an applet with the correct privacy access was created within the br.unicamp.regras.sec_app package to allow the applet's execution in practical cases.
+Consequently, an applet with the correct privacy access was created within the `br.unicamp.regras.sec_app` package to allow the applet's execution in practical cases.
 
-The list of exposed functions/buffers for testing purposes within br.unicamp.regras.applet.MLKEMApplet is as follows:
-- `packedDK` (byte[]) - buffer that stores the decapsulation key.
-- `secretKey` (byte[]) - buffer that stores the secret key.
-- `bufC` (byte[]) - buffer that stores the encapsulation.
-- `generateKeys512Internal()` - internal key generation function for ML-KEM-512.
-- `generateKeys768Internal()` - internal key generation function for ML-KEM-768.
-- `generateKeys1024Internal()` - internal key generation function for ML-KEM-1024.
-- `generateKeys512()` - function that generates the key pair for ML-KEM-512.
-- `generateKeys768()` - function that generates the key pair for ML-KEM-768.
-- `generateKeys1024()` - function that generates the key pair for ML-KEM-1024.
-- `encaps512Internal()` - internal function for encapsulating the secret key for ML-KEM-512.
-- `encaps768Internal()` - internal function for encapsulating the secret key for ML-KEM-768.
-- `encaps1024Internal()` - internal function for encapsulating the secret key for ML-KEM-1024.
-- `encaps512()` - function that encapsulates the ML-KEM-512 secret key.
-- `encaps768()` - function that encapsulates the ML-KEM-768 secret key.
-- `encaps1024()` - function that encapsulates the ML-KEM-1024 secret key.
-- `decaps512Internal()` - internal function for decapsulating the ML-KEM-512 secret key.
-- `decaps768Internal()` - internal function that decapsulates the ML-KEM-768 secret key.
-- `decaps1024Internal()` - internal function that decapsulates the ML-KEM-1024 secret key.
-- `decaps512()` - function that decapsulates the ML-KEM-512 secret key.
-- `decaps768()` - function that decapsulates the ML-KEM-768 secret key.
-- `decaps1024()` - function that decapsulates the ML-KEM-1024 secret key.
+The list of exposed functions/buffers for testing purposes within `br.unicamp.regras.applet.MLKEMApplet` is documented in the [Concerned Functions](docs/ConcernedFunctions.md).
 
 # Installation
 
